@@ -1,0 +1,109 @@
+﻿@model List<ColorResult>
+
+@{
+    var colorClassMap = new Dictionary<string, string>
+    {
+        { "kırmızı", "danger" },
+        { "mavi", "primary" },
+        { "yeşil", "success" },
+        { "sarı", "warning" },
+        { "gri", "secondary" },
+        { "turuncu", "orange" },
+        { "mor", "purple" },
+        { "pembe", "pink" },
+        { "lacivert", "navy" },
+        { "kahverengi", "brown" },
+        { "siyah", "black" },
+        { "beyaz", "white" },
+        { "açık mavi", "lightblue" },
+        { "açık yeşil", "lightgreen" },
+        { "koyu kırmızı", "darkred" },
+        { "koyu yeşil", "darkgreen" },
+        { "gümüş", "silver" },
+        { "altın", "gold" },
+        { "fuşya", "fuchsia" },
+        { "turkuaz", "turquoise" }
+    };
+}
+
+<style>
+    .bg-orange {
+        background-color: #fd7e14;
+    }
+
+    .bg-purple {
+        background-color: #6f42c1;
+    }
+
+    .bg-pink {
+        background-color: #e83e8c;
+    }
+
+    .bg-navy {
+        background-color: #001f3f;
+    }
+
+    .bg-brown {
+        background-color: #8b4513;
+    }
+
+    .bg-black {
+        background-color: #000000;
+    }
+
+    .bg-white {
+        background-color: #ffffff;
+        border: 1px solid black;
+    }
+
+    .bg-lightblue {
+        background-color: #add8e6;
+    }
+
+    .bg-lightgreen {
+        background-color: #90ee90;
+    }
+
+    .bg-darkred {
+        background-color: #8b0000;
+    }
+
+    .bg-darkgreen {
+        background-color: #006400;
+    }
+
+    .bg-silver {
+        background-color: #c0c0c0;
+    }
+
+    .bg-gold {
+        background-color: #ffd700;
+    }
+
+    .bg-fuchsia {
+        background-color: #ff00ff;
+    }
+
+    .bg-turquoise {
+        background-color: #40e0d0;
+    }
+
+    .bg-orange, .bg-purple, .bg-pink, .bg-navy, .bg-brown, .bg-black, .bg-white, .bg-lightblue,
+    .bg-lightgreen, .bg-darkred, .bg-darkgreen, .bg-silver, .bg-gold, .bg-fuchsia, .bg-turquoise {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%; /* Yuvarlak şekil */
+        display: inline-block; /* Yan yana dizilme */
+        margin: 5px; /* Renkler arasında biraz boşluk */
+        
+    }
+</style>
+
+<ul class="product-color">
+    @foreach (var item in Model)
+    {
+        var cssClass = colorClassMap.ContainsKey(item.ColorName.ToLower()) ? colorClassMap[item.ColorName.ToLower()] : "default";
+        <li class="bg-@cssClass"></li>
+    }
+</ul>
+<a href="@Url.Action("UpdateProducthasColor", "ProducthasColor", new {area = "Admin", id = ViewBag.Id })" class="btn btn-primary mt-2">Renk Bilgilerini Güncelle</a>

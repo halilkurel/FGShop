@@ -1,0 +1,9 @@
+﻿@using static FGShop.WebUI.Models.StockModels.ResultStockModel
+@model List<ResultStock>
+
+<td> <b>Stok &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;&nbsp;</b></td>
+@foreach(var item in Model)
+{
+    <td class="txt-success">@item.StockQuantity</td>
+}
+<a href="@Url.Action("UpdateProducthasStock", "ProducthasStock", new {area="Admin", id = ViewBag.Id })" class="btn btn-primary mt-2">Stok Bilgilerini Güncelle</a>

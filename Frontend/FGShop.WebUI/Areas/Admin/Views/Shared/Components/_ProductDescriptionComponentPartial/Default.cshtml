@@ -1,0 +1,9 @@
+﻿@using FGShop.WebUI.Models.ProductModels
+@model GetByProductIdModel
+<h3>1. Açıklama: Bu açıklama ürünün ana açıklamasıdır.</h3>
+<p class="mb-0 m-t-20">@Model.Data.Description</p>
+
+<h3>2. Açıklama: Bu açıklama ürünün detaylı açıklamasıdır.</h3>
+<p class="mb-0 m-t-20">@Model.Data.Description2</p>
+
+<a href="@Url.Action("UpdateProductDescription", "Product", new { area="Admin" ,id = ViewBag.Id })" class="btn btn-primary mt-2">Açıklamaları Güncelle</a>

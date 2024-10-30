@@ -1,0 +1,64 @@
+﻿@model LogInModel
+
+<div id="alert-container"></div>
+<form id="login-form" method="post" asp-controller="LoginSignIn" asp-action="SignInPartial">
+    <h1>Giriş Yap</h1>
+    <div class="social-container">
+        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+    <input type="text" asp-for="UserName" placeholder="Kullanıcı Adınız" />
+    <span asp-validation-for="UserName" class="text-danger"></span>
+
+    <input type="password" asp-for="Password" placeholder="Parolanız" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+
+    <a href="#">Parolanızı mı unuttunuz?</a>
+    <button type="submit">Giriş Yap</button>
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#login-form').on('submit', function (e) {
+            e.preventDefault(); // Formun varsayılan davranışını engelle
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SignInPartial", "LoginSignIn")',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        // Başarılı ise yönlendirme yap
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        // Hata mesajlarını ilgili alanlarda göster
+                        $.each(response.errors, function (key, value) {
+                            var errorSpan = $('input[name="' + key + '"]').next('span');
+                            errorSpan.text(value);
+                        });
+
+                        // Genel bir hata mesajı varsa, onu da göster
+                        if (response.errors.General) {
+                            $('#alert-container').html('<div class="alert alert-danger">' + "Kullanıcı adı veya şifre hatalı" + '</div>');
+                        }
+                    }
+                },
+                error: function () {
+                    $('#alert-container').html('<div class="alert alert-danger">Bilinmeyen bir hata oluştu.</div>');
+                    setTimeout(function () {
+                        $('#alert-container').html(''); // Mesajı temizler
+                    }, 5000); // 5000 milisaniye = 5 saniye
+                }
+            });
+        });
+    });
+
+
+</script>

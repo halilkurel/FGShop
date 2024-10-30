@@ -1,0 +1,44 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+	<link href="/css/LoginSignIn.css" rel="stylesheet" />
+</head>
+<body>
+	
+
+	<!-- from the tutorial https://medium.freecodecamp.org/how-to-build-a-double-slider-sign-in-and-sign-up-form-6a5d03612a34 -->
+	<div class="container" style="height:720px" id="container">
+		<div class="form-container sign-up-container">
+
+			@await Html.PartialAsync("~/Views/LoginSignIn/RegisterPartial.cshtml")
+		</div>
+		<div class="form-container sign-in-container">
+			@await Html.PartialAsync("~/Views/LoginSignIn/SignInPartial.cshtml")
+		</div>
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-left">
+					<h1>Hoşgeldiniz!</h1>
+					<p>Bizimle bağlantıda kalmak için lütfen giriş yapınız</p>
+					<button class="ghost" id="signIn">Giriş Yap</button>
+				</div>
+				<div class="overlay-panel overlay-right">
+					<h1>Merhaba</h1>
+					<p>Kişisel bilgilerinizi girin ve bizimle yolculuğunuza başlayın</p>
+					<button class="ghost" id="signUp">Kayıt Ol</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script src="/js/loginsignin.js"></script>
+</body>
+</html>

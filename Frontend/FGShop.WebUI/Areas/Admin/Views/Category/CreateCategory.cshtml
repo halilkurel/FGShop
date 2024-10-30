@@ -1,0 +1,133 @@
+﻿@model CreateCategoryModel
+@{
+    ViewData["Title"] = "CreateCategory";
+    Layout = "~/Areas/Admin/Views/AdminUILayout/Index.cshtml";
+}
+
+
+<link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/quill.snow.css">
+<link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/intltelinput.min.css">
+<link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/tagify.css">
+<link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/flatpickr/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/dropzone.css">
+
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="alert-container"></div>
+                            <form id="category-form" method="post" enctype="multipart/form-data" asp-action="CreateCategory">
+                                <div class="form theme-form">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label asp-for="CategoryName"></label>
+                                                <input class="form-control" asp-for="CategoryName" type="text" placeholder="Ürün Adı *">
+                                                <span class="text-danger email-error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label asp-for="CategoryImage">Resim Dosyası Ekle</label>
+                                                <input class="form-control" asp-for="CategoryImage" type="file">
+                                                <span class="text-danger email-error"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col text-end">
+                                            <button type="submit" class="btn btn-success me-3">Ekle</button>
+                                            <a class="btn btn-danger" href="/Admin/Category/Index">İptal</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/jquery.min.js"></script>
+<!-- Bootstrap js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+<!-- feather icon js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/icons/feather-icon/feather.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/icons/feather-icon/feather-icon.js"></script>
+<!-- scrollbar js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/scrollbar/simplebar.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/scrollbar/custom.js"></script>
+<!-- Sidebar jquery-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/config.js"></script>
+<!-- Plugins JS start-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/sidebar-menu.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/sidebar-pin.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/slick/slick.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/slick/slick.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/header-slick.js"></script>
+<!-- calendar js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/flat-pickr/flatpickr.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/flat-pickr/custom-flatpickr.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/dropzone/dropzone.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/dropzone/dropzone-script.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/select2/tagify.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/select2/tagify.polyfills.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/select2/intltelinput.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/add-product/select4-custom.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/editors/quill.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/custom-add-product.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/height-equal.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/tooltip-init.js"></script>
+<!-- Plugins JS Ends-->
+<!-- Theme js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/script.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#category-form').on('submit', function (e) {
+            e.preventDefault(); // Formun varsayılan davranışını engelle
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateCategory", "Category", new { area = "Admin" })',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        // Başarılı ise yönlendirme yap
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        // Hata mesajlarını ilgili alanlarda göster
+                        $.each(response.errors, function (key, value) {
+                            var errorSpan = $('input[name="' + key + '"]').next('span');
+                            errorSpan.text(value);
+                        });
+
+                        // Genel bir hata mesajı varsa, onu da göster
+                        if (response.errors.General) {
+                            $('#alert-container').html('<div class="alert alert-danger">' + response.errors.General + '</div>');
+                        }
+                    }
+                },
+                error: function () {
+                    $('#alert-container').html('<div class="alert alert-danger">Bilinmeyen bir hata oluştu.</div>');
+                    setTimeout(function () {
+                        $('#alert-container').html(''); // Mesajı temizler
+                    }, 5000); // 5000 milisaniye = 5 saniye
+                }
+            });
+        });
+    });
+
+
+</script>

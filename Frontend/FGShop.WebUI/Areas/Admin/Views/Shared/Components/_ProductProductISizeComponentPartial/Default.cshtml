@@ -1,0 +1,9 @@
+﻿@model List<SizeResult>
+
+<td> <b>Beden : </b></td>
+<td> </td>
+@foreach(var item in Model)
+{
+    <td> -@item.SizeName</td>
+}
+<a href="@Url.Action("UpdateProducthasSize", "ProducthasSize", new {area = "Admin", id = ViewBag.Id })" class="btn btn-primary mt-2">Beden Ölçülerini Güncelle</a>

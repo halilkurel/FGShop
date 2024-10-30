@@ -1,0 +1,131 @@
+private readonly IUow _uow;
+        private readonly IMapper _mapper;
+        private readonly IValidator<CreateProductDto> _createValidator;
+        private readonly IValidator<UpdateProductDto> _updateValidator;
+
+
+        public ProductService(IUow uow, IMapper mapper, IValidator<CreateProductDto> createValidator, IValidator<UpdateProductDto> updateValidator)
+        {
+            _uow = uow;
+            _mapper = mapper;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
+        }
+
+        public async Task Create(CreateProductDto dto)
+        {
+            var result = _createValidator.Validate(dto);
+            if (result.IsValid)
+            {
+                await _uow.GetRepository<Product>().Create(_mapper.Map<Product>(dto));
+                await _uow.SaveChanges();
+            }
+        }
+
+        public async Task<List<ResultProductDto>> GetAll()
+        {
+            return _mapper.Map<List<ResultProductDto>>(await _uow.GetRepository<Product>().GetAll());
+        }
+
+        public async Task<IDto> GetById<IDto>(int id)
+        {
+            var value = await _uow.GetRepository<Product>().Find(id);
+            return _mapper.Map<IDto>(value);
+        }
+
+        public async Task Remove(int id)
+        {
+            var removed = await _uow.GetRepository<Product>().GetByFilter(x => x.Id == id);
+            if (removed != null)
+            {
+                _uow.GetRepository<Product>().Remove(removed);
+                await _uow.SaveChanges();
+            }
+
+        }
+
+        public async Task Update(UpdateProductDto dto)
+        {
+            var updatedEntity = await _uow.GetRepository<Product>().Find(dto.Id);
+            if (updatedEntity != null)
+            {
+                _uow.GetRepository<Product>().Update(_mapper.Map<Product>(dto), updatedEntity);
+                await _uow.SaveChanges();
+            }
+
+
+        }
+
+        async Task<IResponse<CreateProductDto>> IProductService.Create(CreateProductDto dto)
+        {
+            var ValidationResult = _createValidator.Validate(dto);
+            if (ValidationResult.IsValid)
+            {
+                await _uow.GetRepository<Product>().Create(_mapper.Map<Product>(dto));
+                await _uow.SaveChanges();
+
+                return new Response<CreateProductDto>(ResponseType.Success, dto);
+            }
+
+
+
+            else
+            {
+
+                return new Response<CreateProductDto>(ResponseType.ValidationError, dto, ValidationResult.CovertToCustomValidationError());
+            }
+        }
+
+        async Task<IResponse<List<ResultProductDto>>> IProductService.GetAll()
+        {
+            var data = _mapper.Map<List<ResultProductDto>>(await _uow.GetRepository<Product>().GetAll());
+
+            return new Response<List<ResultProductDto>>(ResponseType.Success, data);
+        }
+
+        async Task<IResponse<IDto>> IProductService.GetById<IDto>(int id)
+        {
+            var data = _mapper.Map<IDto>(await _uow.GetRepository<Product>().GetByFilter(x => x.Id == id));
+            if (data == null)
+            {
+                return new Response<IDto>(ResponseType.NotFound, $"{id} ait data bulunamadý");
+            }
+            return new Response<IDto>(ResponseType.Success, data);
+        }
+
+        async Task<IResponse> IProductService.Remove(int id)
+        {
+            var deletedEntity = await _uow.GetRepository<Product>().GetByFilter(x => x.Id == id);
+            if (deletedEntity != null)
+            {
+                _uow.GetRepository<Product>().Remove(deletedEntity);
+                await _uow.SaveChanges();
+                return new Response(ResponseType.Success);
+            }
+            else
+            {
+                return new Response(ResponseType.NotFound, $"{id} ye ait data bulunamadý");
+            }
+        }
+
+        async Task<IResponse<UpdateProductDto>> IProductService.Update(UpdateProductDto dto)
+        {
+            var result = _updateValidator.Validate(dto);
+            if (result.IsValid)
+            {
+                var updatedEntity = await _uow.GetRepository<Product>().Find(dto.Id);
+                if (updatedEntity != null)
+                {
+                    _uow.GetRepository<Product>().Update(_mapper.Map<Product>(dto), updatedEntity);
+                    _uow.SaveChanges();
+
+                    return new Response<UpdateProductDto>(ResponseType.Success, dto);
+                }
+                return new Response<UpdateProductDto>(ResponseType.NotFound, $"{dto.Id} ait data bulunamadý");
+
+            }
+            else
+            {
+                return new Response<UpdateProductDto>(ResponseType.ValidationError, dto, result.CovertToCustomValidationError());
+            }
+        }

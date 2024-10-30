@@ -1,0 +1,73 @@
+﻿@model CreateContactModel
+
+<div id="contact-form-container" class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+    <form id="contact-form" method="post">
+        <h4 class="mtext-105 cl2 txt-center p-b-30">
+            Bir Mesaj Gönder
+        </h4>
+
+        <div id="alert-container"></div>
+
+        <div class="bor8 m-b-20 how-pos4-parent">
+            <input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30"
+                   type="text"
+                   name="Email"
+                   placeholder="Mail Adresiniz">
+            <img class="how-pos4 pointer-none" src="/cozastore-master/images/icons/icon-email.png" alt="ICON">
+            <span class="text-danger email-error" a></span>
+        </div>
+
+
+        <div class="bor8 m-b-30">
+            <textarea class="stext-111 cl2 plh3 size-120 p-lr-28 p-tb-25"
+                      name="Message"
+                      placeholder="Nasıl Yardımcı Olabilirim?"></textarea>
+            <span class="text-danger message-error"></span>
+        </div>
+
+        <button type="submit" class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
+            Gönder
+        </button>
+    </form>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#contact-form').on('submit', function (e) {
+            e.preventDefault(); // Formun varsayılan davranışını engelle
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ContactFormPartial", "Contact")',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {  
+                        $('#alert-container').html('<div class="alert alert-success">Mesaj başarı ile gönderildi</div>');
+                        $('#contact-form')[0].reset(); // Formu temizle
+                    } else {
+                        // Hata mesajlarını göster
+                        var errorHtml = '<div class="alert alert-danger">';
+                        $.each(response, function (key, value) {
+                            if (key !== 'success' && key !== 'message') {
+                                errorHtml += '<div>' + value + '</div>';
+                            }
+                        });
+                        errorHtml += '</div>';
+                        $('#alert-container').html(errorHtml);
+                    }
+                },
+                error: function () {
+                    $('#alert-container').html('<div class="alert alert-danger">Mesaj ve Mail adresi alanı boş olamaz, lütfen tekrar deneyin.</div>');
+                    setTimeout(function () {
+                        $('#alert-container').html(''); // Mesajı temizler
+                    }, 5000); // 5000 milisaniye = 5 saniye
+                }
+
+            });
+        });
+    });
+</script>
+

@@ -1,0 +1,13 @@
+﻿@model List<CategoryResult>
+
+<div class="filter-block">
+    <h4>Kategoriler</h4>
+    <ul>
+        @foreach(var item in Model)
+        {
+            <li><a class="f-w-500">@item.CategoryName</a></li>
+        }
+        
+    </ul>
+    <a href="@Url.Action("UpdateProducthasCategory", "ProducthasCategory", new { area="Admin" ,id = ViewBag.Id })" class="btn btn-primary mt-2">Ürün Kategorilerini Güncelle</a>
+</div>

@@ -1,0 +1,2 @@
+-Frontend kýsmýnda WebUI kýsmý parçalara ayrýlarak düzenlenecek.
+- Daha sonra backend kýsmýna gçilip entity katmanýna parçalý sayfalara göre entity yazýlacak

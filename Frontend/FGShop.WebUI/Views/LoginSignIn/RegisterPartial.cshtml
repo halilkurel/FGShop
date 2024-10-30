@@ -1,0 +1,74 @@
+﻿@model CreateRegisterModel
+
+
+<form id="registerForm" method="post" asp-action="RegisterPartial" asp-controller="LoginSignIn">
+    <div id="alert-container"></div>
+    <h1>Hesap oluştur</h1>
+    <div class="social-container">
+        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+
+    <input type="text" asp-for="Name" placeholder="Adınız" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+
+    <input type="text" asp-for="Surname" placeholder="Soyadınız" />
+    <span asp-validation-for="Surname" class="text-danger"></span>
+
+    <input type="text" asp-for="Username" placeholder="Kullanıcı Adınız" />
+    <span asp-validation-for="Username" class="text-danger"></span>
+
+    <input type="email" asp-for="Email" placeholder="Mail Adresiniz" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+
+    <input type="password" asp-for="Password" placeholder="Parolanız" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+
+    <input type="password" asp-for="ConfirmPassword" placeholder="Parola Tekrarı" />
+    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+    <button type="submit">Kayıt Ol</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#registerForm').on('submit', function (e) {
+            e.preventDefault(); // Formun varsayılan davranışını engelle
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("RegisterPartial", "LoginSignIn")',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        // Başarılı ise yönlendirme yap
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        // Hata mesajlarını ilgili alanlarda göster
+                        $.each(response.errors, function (key, value) {
+                            var errorSpan = $('input[name="' + key + '"]').next('span');
+                            errorSpan.text(value);
+                        });
+
+                        // Genel bir hata mesajı varsa, onu da göster
+                        if (response.errors.General) {
+                            $('#alert-container').html('<div class="alert alert-danger">' + response.errors.General + '</div>');
+                        }
+                    }
+                },
+                error: function () {
+                    $('#alert-container').html('<div class="alert alert-danger">Bilinmeyen bir hata oluştu.</div>');
+                    setTimeout(function () {
+                        $('#alert-container').html(''); // Mesajı temizler
+                    }, 5000); // 5000 milisaniye = 5 saniye
+                }
+            });
+        });
+    });
+</script>
