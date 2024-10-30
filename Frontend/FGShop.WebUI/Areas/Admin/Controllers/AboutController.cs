@@ -54,6 +54,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 
         [HttpPut]
         [Route("UpdateAbout")]
+        
         public async Task<IActionResult> UpdateAbout(UpdateAboutModel model)
         {
             var httpClient = _httpClientFactory.CreateClient();
