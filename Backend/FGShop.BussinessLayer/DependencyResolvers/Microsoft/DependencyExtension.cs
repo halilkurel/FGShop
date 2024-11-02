@@ -48,6 +48,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,7 +77,6 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddSingleton(mapper);
 
             services.AddScoped<IUow, Uow>();
-
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IIdentityRoleService, IdentityRoleService>();

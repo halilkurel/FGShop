@@ -1,6 +1,7 @@
 ﻿using FGShop.WebUI.Models.ImageModels;
 using FGShop.WebUI.Models.ProducthasStockModels;
 using FGShop.WebUI.Models.StockModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -11,6 +12,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/ProducthasStock")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class ProducthasStockController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

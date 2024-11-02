@@ -1,33 +1,48 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add HttpClient for making HTTP requests (e.g., API calls)
+// HttpClient servisini ekleyin
 builder.Services.AddHttpClient();
 
-// Add MVC services with controllers and views
-builder.Services.AddControllersWithViews();
+// Oturum ve cache yapýlandýrmasý
+builder.Services.AddDistributedMemoryCache(); // Cache için
 
-// JWT authentication configuration (if needed)
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+
+var requireAuthorizePolicy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .Build();
+
+builder.Services.AddAuthorization(options =>
 {
-    opt.RequireHttpsMetadata = false;
-    opt.TokenValidationParameters = new TokenValidationParameters
+    // Admin rolü için bir politika tanýmlayýn
+    options.AddPolicy("RequireAdministratorRole", policy =>
+        policy.RequireRole("Admin"));
+
+    // User rolü için bir politika tanýmlayýn
+    options.AddPolicy("RequireUserRole", policy =>
+        policy.RequireRole("User"));
+});
+
+// Kimlik doðrulama ve Cookie Authentication yapýlandýrmasý
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
     {
-        ValidIssuer = "http://localhost", // Your valid issuer
-        ValidAudience = "http://localhost", // Your valid audience
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key_here")),
-        ValidateIssuerSigningKey = true,
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero // Immediate token expiration check
-    };
+        options.LoginPath = "/LoginSignIn/Index"; // Giriþ sayfasý yolu
+        options.AccessDeniedPath = "/LoginSignIn/Index"; // Eriþim reddedildiðinde yönlendirme
+    });
+
+// MVC ve API denetleyicilerini ekleyin
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new AuthorizeFilter(requireAuthorizePolicy)); // Tüm denetleyicilere kimlik doðrulama gerektir
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// HTTP istek hattýný yapýlandýrma
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -39,21 +54,19 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Enable Authentication and Authorization
-app.UseAuthentication(); // This should come before UseAuthorization
+
+// Kimlik doðrulama ve yetkilendirme orta katmanlarýný ekleyin
+app.UseAuthentication();
 app.UseAuthorization();
 
-// Configure MVC routing, including default route and areas
+// MVC rota yapýlandýrmasý
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Default}/{action=Index}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
-    // Route configuration for areas
-    endpoints.MapControllerRoute(
-        name: "areas",
-        pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-});
+// Area destekli rota yapýlandýrmasý
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

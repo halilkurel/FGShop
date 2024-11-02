@@ -1,5 +1,6 @@
 ﻿using FGShop.WebUI.Models.ColorModels;
 using FGShop.WebUI.Models.ProducthasColorModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/ProducthasColor")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class ProducthasColorController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

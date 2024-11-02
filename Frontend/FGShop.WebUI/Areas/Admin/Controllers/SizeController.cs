@@ -1,5 +1,6 @@
 ﻿using FGShop.WebUI.Models.SizeModels;
 using FGShop.WebUI.Models.ValdiationModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
@@ -8,6 +9,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/Size")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class SizeController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

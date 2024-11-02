@@ -8,6 +8,10 @@ using FGShop.CommanLayer;
 using FluentValidation.Results;
 using FGShop.BussinessLayer.DependencyResolvers.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace FGShop.BussinessLayer.Services
 {
@@ -121,7 +125,7 @@ namespace FGShop.BussinessLayer.Services
             if (!validationResponse.IsValid)
             {
                 // Validasyon hataları varsa döndür
-                return new Response<UserLoginDto>(ResponseType.ValidationError, dto,
+                return new Response<UserLoginDto>(ResponseType.ValidationError, null,
                     validationResponse.CovertToCustomValidationError());
             }
 
@@ -130,21 +134,20 @@ namespace FGShop.BussinessLayer.Services
 
             if (signInResult.Succeeded)
             {
-                var existingUserByUsername = await _userManager.FindByNameAsync(dto.UserName);
-
-                var userRoles = await _userManager.GetRolesAsync(existingUserByUsername);
-                if (userRoles != null && userRoles.Contains("User"))
+                // Kullanıcıyı bul ve rolünü al
+                var user = await _userManager.FindByNameAsync(dto.UserName);
+                var roles = await _userManager.GetRolesAsync(user);
+                if (user != null)
                 {
-                    var token = _tokenService.TokenCreateUser(dto);
-                    return new Response<UserLoginDto>(ResponseType.Success, dto, token);
-                }
-                else
-                {
-                    var token = _tokenService.TokenCreateAdmin(dto);
-                    return new Response<UserLoginDto>(ResponseType.Success, dto, token);
-                }
+                    // Token'ı oluştur
+                    var token = _tokenService.TokenCreate(user.UserName, roles[0]);
 
-                
+                    return new Response<UserLoginDto>(ResponseType.Success, new UserLoginDto
+                    {
+                        Password = dto.Password,
+                        UserName = dto.UserName
+                    },token);
+                }
             }
 
             // Giriş başarısız olursa uygun hata mesajları döndür
@@ -175,7 +178,34 @@ namespace FGShop.BussinessLayer.Services
                 });
             }
 
-            return new Response<UserLoginDto>(ResponseType.ValidationError, dto, errors);
+            return new Response<UserLoginDto>(ResponseType.ValidationError, null, errors);
+        }
+
+        // JWT Token oluşturma metodunu tanımlayın
+        private string GenerateJwtToken(ApplicationUser user, IList<string> roles)
+        {
+            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key_here")); // Anahtarınızı buraya yerleştirin
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: "your_issuer_here",
+                audience: "your_audience_here",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30), // Token geçerlilik süresi
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
 

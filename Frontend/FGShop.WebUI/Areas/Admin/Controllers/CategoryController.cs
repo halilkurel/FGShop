@@ -12,7 +12,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/Category")]
-
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class CategoryController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

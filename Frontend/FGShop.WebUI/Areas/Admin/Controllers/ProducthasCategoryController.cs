@@ -2,6 +2,7 @@
 using FGShop.WebUI.Models.ProducthasCategoryModels;
 using FGShop.WebUI.Models.ProducthasSizeModels;
 using FGShop.WebUI.Models.SizeModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -9,6 +10,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/ProducthasCategory")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class ProducthasCategoryController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

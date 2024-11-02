@@ -5,8 +5,8 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
 	[Area("Admin")]
 	[Route("Admin/AdminUILayout")]
-
-	public class AdminUILayoutController : Controller
+    [Authorize(Policy = "RequireAdministratorRole")]
+    public class AdminUILayoutController : Controller
 	{
 		[Route("Index")]
 		public IActionResult Index()

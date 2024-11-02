@@ -5,11 +5,13 @@ using System.Text;
 using FGShop.WebUI.Models.ColorModels;
 using FGShop.WebUI.Models.ProducthasColorModels;
 using System.Drawing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/ProducthasSize")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class ProducthasSizeController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

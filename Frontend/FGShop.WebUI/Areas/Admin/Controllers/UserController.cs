@@ -8,7 +8,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/User")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class UserController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

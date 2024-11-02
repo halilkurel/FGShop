@@ -1,6 +1,7 @@
 ﻿using FGShop.WebUI.Models.ImageModels;
 using FGShop.WebUI.Models.ProducthasImageModels;
 using FGShop.WebUI.Models.ProductModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -10,6 +11,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/ProducthasImage")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class ProducthasImageController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

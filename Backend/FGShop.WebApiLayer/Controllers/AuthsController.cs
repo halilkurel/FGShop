@@ -40,12 +40,14 @@ namespace FGShop.WebApiLayer.Controllers
 
             if (result.ResponseType == ResponseType.ValidationError)
             {
+                // Eğer validation hatası varsa, hata mesajlarını döndür
                 return BadRequest(result.ValidationErrors);
             }
 
-
+            // Başarılı girişte kullanıcıyı ve token'ı içeren yanıtı döndür
             return Ok(result);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllUser()

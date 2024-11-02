@@ -1,6 +1,7 @@
 ﻿using FGShop.WebUI.Models.CategoryModels;
 using FGShop.WebUI.Models.SliderModels;
 using FGShop.WebUI.Models.ValdiationModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
@@ -9,6 +10,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/Slider")]
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class SliderController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

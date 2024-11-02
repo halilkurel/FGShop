@@ -9,7 +9,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/Color")]
-
+    [Authorize(Policy = "RequireAdministratorRole")]
     public class ColorController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;

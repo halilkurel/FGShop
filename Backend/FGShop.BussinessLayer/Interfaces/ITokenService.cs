@@ -9,7 +9,6 @@ namespace FGShop.BussinessLayer.Interfaces
 {
     public interface ITokenService
     {
-        string TokenCreateAdmin(UserLoginDto dto);
-        string TokenCreateUser(UserLoginDto dto);
+        string TokenCreate(string userName, string role);
     }
 }

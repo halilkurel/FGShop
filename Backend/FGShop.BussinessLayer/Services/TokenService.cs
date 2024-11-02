@@ -1,18 +1,15 @@
 ﻿using FGShop.BussinessLayer.Interfaces;
 using FGShop.DtoLayer.AuthDtos;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FGShop.BussinessLayer.Services
 {
-    public class TokenService : ITokenService
+    public class TokenService: ITokenService
     {
         private readonly IConfiguration _configuration;
 
@@ -21,41 +18,27 @@ namespace FGShop.BussinessLayer.Services
             _configuration = configuration;
         }
 
-        public string TokenCreateAdmin(UserLoginDto dto)
+        public string TokenCreate(string userName,string role)
         {
-            var bytes = Encoding.UTF8.GetBytes("aspnetcoreapiapiaspnetcoreapiapi");
-            SymmetricSecurityKey key = new SymmetricSecurityKey(bytes);
-            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            List<Claim> claims = new List<Claim>()
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aspnetcoreapiapiaspnetcoreapiapi"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role,"Admin"),
-                new Claim(ClaimTypes.Role,"User"),
-                new Claim(ClaimTypes.Name, dto.UserName)
+            new Claim(JwtRegisteredClaimNames.Sub, userName),
+            new Claim(ClaimTypes.Role, role),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(issuer: "http://localhost", audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddHours(2), signingCredentials: credentials, claims: claims);
+            var token = new JwtSecurityToken(
+                issuer: "http://localhost:7171",
+                audience: "http://localhost:7163",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(60),
+                signingCredentials: creds
+            );
 
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            return handler.WriteToken(jwtSecurityToken);
-        }
-
-        public string TokenCreateUser(UserLoginDto dto)
-        {
-            var bytes = Encoding.UTF8.GetBytes("aspnetcoreapiapiaspnetcoreapiapi");
-            SymmetricSecurityKey key = new SymmetricSecurityKey(bytes);
-            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            List<Claim> claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier,Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role,"User"),
-                new Claim(ClaimTypes.Name, dto.UserName)
-            };
-
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(issuer: "http://localhost", audience: "http://localhost", notBefore: DateTime.Now, expires: DateTime.Now.AddHours(2), signingCredentials: credentials, claims: claims);
-
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            return handler.WriteToken(jwtSecurityToken);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
