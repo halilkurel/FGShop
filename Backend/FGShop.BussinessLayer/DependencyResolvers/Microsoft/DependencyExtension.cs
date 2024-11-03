@@ -147,6 +147,7 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddScoped<IProducthasSizeService, ProducthasSizeService>();
             services.AddScoped<IStockService, StockService>();
             services.AddScoped<IProducthasStockService, ProducthasStockService>();
+            services.AddScoped<IUserInformationService, UserInformationService>();
 
 
             

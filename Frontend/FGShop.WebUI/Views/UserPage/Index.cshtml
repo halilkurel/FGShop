@@ -1,0 +1,182 @@
+﻿@model FGShop.WebUI.Models.UserModels.UserInformationModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_WebUILayout/Index.cshtml";
+}
+
+<style>
+    /* Önceki stil tanımlamaları burada kalabilir */
+    .container1 {
+        height: 80vh;
+        width: 100%;
+        position: relative;
+    }
+
+    .body1 {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .row1 {
+        flex: 0 0 25%;
+        background-color: #B0C4DE;
+        margin: 5px;
+        border-radius: 10px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .row2 {
+        flex: 0 0 75%;
+        margin: 5px;
+        border-radius: 10px;
+        padding: 10px;
+        display: none; /* Başlangıçta gizli olacak */
+        box-sizing: border-box;
+        overflow: hidden; /* Taşma durumunda kaydırma çubuğu ekleme */
+        max-height: calc(80vh - 20px); /* Yüksekliği sınırla */
+    }
+
+    .menu-item {
+        margin: 10px 0;
+        background-color: #FFFFFF;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+        .menu-item:hover {
+            background-color: #F0E68C;
+        }
+
+    .orders, .information, .logout {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 25px 0; /* Üst ve alt boşluk ekle */
+        background-color: silver;
+        display: none; /* Başlangıçta gizli olacak */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    a {
+        text-decoration: none; /* Alt çizgiyi kaldır */
+        color: black; /* Yazı rengini ayarla */
+        display: flex; /* Flexbox kullan */
+        justify-content: center; /* Yatayda ortala */
+        align-items: center; /* Dikeyde ortala */
+        width: 100%; /* Genişlik */
+        height: 100%; /* Yükseklik */
+        box-sizing: border-box; /* Kutuyu hesaba kat */
+    }
+
+
+    p {
+        color: black;
+    }
+</style>
+
+<div class="container1">
+    <div class="body1">
+        <div class="row1">
+            <div class="menu-item" onclick="showContent('orders')">Siparişler</div>
+            <div class="menu-item" onclick="showContent('information')">Kullanıcı Bilgileri</div>
+            <div class="menu-item">
+                <form id="logoutForm" asp-area="Admin" asp-controller="LoginSignIn" asp-action="LogOut" method="post" style="display: none;">
+                    <!-- Form gizli, JavaScript ile tetiklenecek -->
+                </form>
+                <a href="javascript:void(0);" class="sidebar-link sidebar-title link-nav" onclick="document.getElementById('logoutForm').submit();" style="display: flex; align-items: center;">
+                    Çıkış Yap</a>
+            </div>
+        </div>
+        <div class="row2">
+            <div class="orders">
+                <p>Orders</p>
+            </div>
+            <div class="information">
+                <h3>Kullanıcı Bilgileri</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Özellik</th>
+                            <th>Değer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ad</td>
+                            <td>@Model.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Soyad</td>
+                            <td>@Model.Surname</td>
+                        </tr>
+                        <tr>
+                            <td>Kullanıcı Adı</td>
+                            <td>@Model.Username</td>
+                        </tr>
+                        <tr>
+                            <td>Telefon Numarası</td>
+                            <td>@Model.PhoneNumber</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>@Model.Email</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function showContent(content) {
+        // Öncelikle tüm içerikleri gizle
+        document.querySelector('.orders').style.display = 'none';
+        document.querySelector('.information').style.display = 'none';
+
+        // Row2'yi göster
+        document.querySelector('.row2').style.display = 'block';
+
+        // Tıklanan içeriği göster
+        if (content === 'orders') {
+            document.querySelector('.orders').style.display = 'block';
+        } else if (content === 'information') {
+            document.querySelector('.information').style.display = 'block';
+        }
+    }
+</script>
+

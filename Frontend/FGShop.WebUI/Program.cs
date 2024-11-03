@@ -54,7 +54,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
 // Kimlik doðrulama ve yetkilendirme orta katmanlarýný ekleyin
 app.UseAuthentication();
 app.UseAuthorization();

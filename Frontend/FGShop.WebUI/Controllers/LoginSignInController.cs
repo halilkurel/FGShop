@@ -109,12 +109,22 @@ namespace FGShop.WebUI.Controllers
                     
                 };
 
+                //Oturum açmak
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                return Json(new { success = true, redirectUrl = Url.Action("Index", "Default") });
+                var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+
+                if(roleClaim == "Admin")
+                {
+                    return Json(new { success = true, redirectUrl = Url.Action("Index", "Dashboard", new { area = "Admin" }) });
+                }
+
+                else return Json(new { success = true, redirectUrl = Url.Action("Index", "Default") });
+
+
             }
 
             // Giriş başarısızsa, hata mesajlarını işle ve dön
@@ -125,6 +135,13 @@ namespace FGShop.WebUI.Controllers
             var errorDict = errors?.ToDictionary(e => e.PropertyName, e => e.ErrorMessage);
 
             return Json(new { success = false, errors = errorDict });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index","LoginSignIn");
         }
 
 
