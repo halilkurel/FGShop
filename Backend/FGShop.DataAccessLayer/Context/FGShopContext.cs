@@ -35,6 +35,13 @@ namespace FGShop.DataAccessLayer.Context
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<ProducthasStock> producthasStocks { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Status> Statuses { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<Order> Orders { get; set; }
+
+
+
 
 
 

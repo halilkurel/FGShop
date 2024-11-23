@@ -64,7 +64,7 @@
             background-color: #F0E68C;
         }
 
-    .orders, .information, .logout {
+    .orders, .information {
         width: 100%;
         box-sizing: border-box;
         margin: 25px 0; /* Üst ve alt boşluk ekle */
@@ -88,7 +88,7 @@
         background-color: #f2f2f2;
     }
 
-    a {
+    .a1 {
         text-decoration: none; /* Alt çizgiyi kaldır */
         color: black; /* Yazı rengini ayarla */
         display: flex; /* Flexbox kullan */
@@ -105,6 +105,9 @@
     }
 </style>
 
+<!-- Cart -->
+@await Html.PartialAsync("~/Views/_WebUILayoutPartial/_WebUILayoutCardPartial.cshtml")
+
 <div class="container1">
     <div class="body1">
         <div class="row1">
@@ -114,7 +117,7 @@
                 <form id="logoutForm" asp-area="Admin" asp-controller="LoginSignIn" asp-action="LogOut" method="post" style="display: none;">
                     <!-- Form gizli, JavaScript ile tetiklenecek -->
                 </form>
-                <a href="javascript:void(0);" class="sidebar-link sidebar-title link-nav" onclick="document.getElementById('logoutForm').submit();" style="display: flex; align-items: center;">
+                <a href="javascript:void(0);" class="sidebar-link sidebar-title link-nav a1" onclick="document.getElementById('logoutForm').submit();" style="display: flex; align-items: center;">
                     Çıkış Yap</a>
             </div>
         </div>
@@ -155,9 +158,6 @@
                     </tbody>
                 </table>
             </div>
-
-
-
         </div>
     </div>
 </div>

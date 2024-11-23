@@ -1,19 +1,23 @@
 ﻿using AutoMapper;
+using FGShop.BussinessLayer.EntityFremawork.EfOrder;
 using FGShop.BussinessLayer.EntityFremawork.EFProduct;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasCategory;
 using FGShop.BussinessLayer.EntityFremawork.EfProducthasColor;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasImage;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasSize;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasStock;
+using FGShop.BussinessLayer.EntityFremawork.EFUserAddress;
 using FGShop.BussinessLayer.Interfaces;
 using FGShop.BussinessLayer.Mappings.AutoMapper;
 using FGShop.BussinessLayer.Services;
 using FGShop.BussinessLayer.ValidationRules.AboutValidationRules;
 using FGShop.BussinessLayer.ValidationRules.AuthValidationRules;
+using FGShop.BussinessLayer.ValidationRules.BasketValidationRules;
 using FGShop.BussinessLayer.ValidationRules.CategoryValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ColorValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ContactValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ImageValidationRules;
+using FGShop.BussinessLayer.ValidationRules.OrderValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProducthasCategoryValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProducthasColorValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProducthasImageValidationRules;
@@ -23,14 +27,17 @@ using FGShop.BussinessLayer.ValidationRules.ProductValidationRules;
 using FGShop.BussinessLayer.ValidationRules.SizeValidationRules;
 using FGShop.BussinessLayer.ValidationRules.SliderValidationRules;
 using FGShop.BussinessLayer.ValidationRules.StockValidationRules;
+using FGShop.BussinessLayer.ValidationRules.UserAddressValidationRules;
 using FGShop.DataAccessLayer.Context;
 using FGShop.DataAccessLayer.UnitOfWork;
 using FGShop.DtoLayer.AboutDtos;
 using FGShop.DtoLayer.AuthDtos;
+using FGShop.DtoLayer.BasketDtos;
 using FGShop.DtoLayer.CategoryDtos;
 using FGShop.DtoLayer.ColorDtos;
 using FGShop.DtoLayer.ContactDtos;
 using FGShop.DtoLayer.ImageDtos;
+using FGShop.DtoLayer.OrderDtos;
 using FGShop.DtoLayer.ProductDtos;
 using FGShop.DtoLayer.ProducthasCategoryDtos;
 using FGShop.DtoLayer.ProducthasColorDtos;
@@ -40,6 +47,7 @@ using FGShop.DtoLayer.ProucthasSizeDtos;
 using FGShop.DtoLayer.SizeDtos;
 using FGShop.DtoLayer.SliderDtos;
 using FGShop.DtoLayer.StockDtos;
+using FGShop.DtoLayer.UserAddressDtos;
 using FGShop.EntityLayer.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -131,6 +139,15 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddTransient<IValidator<UserRegisterDto>, CreateRegisterDtoValidator>();
             services.AddTransient<IValidator<UserLoginDto>, CreateLoginValidationRules>();
 
+            services.AddTransient<IValidator<CreateUserAddressDto>, CreateUserAddressValidator>();
+            services.AddTransient<IValidator<UpdateUserAddressDto>, UpdateUserAddressValidator>();
+
+			services.AddTransient<IValidator<CreateBasketDto>, CreateBasketDtoValidator>();
+			services.AddTransient<IValidator<UpdateBasketDto>, UpdateBasketDtoValidator>();
+
+            services.AddTransient<IValidator<CreateOrderDto>, CreateOrderDtoValidator>();
+            services.AddTransient<IValidator<UpdateOrderDto>, UpdateOrderDtoValidator>();
+
 
 
             services.AddScoped<IProductService, ProductService>();
@@ -148,6 +165,10 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddScoped<IStockService, StockService>();
             services.AddScoped<IProducthasStockService, ProducthasStockService>();
             services.AddScoped<IUserInformationService, UserInformationService>();
+            services.AddScoped<IUserAddressService, UserAddressService>();
+            services.AddScoped<IStatusService, StatusService>();
+            services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IOrderService, OrderService>();
 
 
             
@@ -160,6 +181,10 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddScoped<IEFProducthasSizeService, EFProducthasSizeService>();
             services.AddScoped<IEFProducthasStockService, EFProducthasStockService>();
             services.AddScoped<IEFProductService, EFProductService>();
+            services.AddScoped<IEFBasketService, EFBasketService>();
+            services.AddScoped<IEFUserAddressService, EFUserAddressService>();
+
+
 
 
 

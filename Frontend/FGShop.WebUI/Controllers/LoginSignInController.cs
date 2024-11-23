@@ -92,6 +92,7 @@ namespace FGShop.WebUI.Controllers
                 {
                     new Claim(ClaimTypes.Name, jwtToken.Claims.First(c => c.Type == "sub").Value), // "sub" alanını kullan
                     new Claim(ClaimTypes.Role, jwtToken.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value), // Rolü almak için 
+                    new Claim(ClaimTypes.NameIdentifier, jwtToken.Claims.First(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value) // userId'yi almak için
                 };
 
                 // Claims'i ekle

@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSession();
+
+
+
 // HttpClient servisini ekleyin
 builder.Services.AddHttpClient();
 
@@ -49,23 +53,20 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
-// Kimlik doðrulama ve yetkilendirme orta katmanlarýný ekleyin
 app.UseAuthentication();
 app.UseAuthorization();
 
-// MVC rota yapýlandýrmasý
+app.UseSession(); // Session orta katmanýný ekleyin
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Default}/{action=Index}/{id?}");
 
-// Area destekli rota yapýlandýrmasý
-app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

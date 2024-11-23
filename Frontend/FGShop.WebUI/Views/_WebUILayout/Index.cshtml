@@ -54,8 +54,8 @@
 
 	</header>
 
-	<!-- Cart -->
-	@await Html.PartialAsync("~/Views/_WebUILayoutPartial/_WebUILayoutCardPartial.cshtml")
+@* 	<!-- Cart -->
+	@await Html.PartialAsync("~/Views/_WebUILayoutPartial/_WebUILayoutCardPartial.cshtml") *@
 	
 
 
@@ -151,7 +151,7 @@
 		$('.js-addcart-detail').each(function(){
 			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
 			$(this).on('click', function(){
-				swal(nameProduct, "is added to cart !", "success");
+				swal(nameProduct, "karta eklendi !", "success");
 			});
 		});
 

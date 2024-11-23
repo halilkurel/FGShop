@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using FGShop.DtoLayer.AboutDtos;
 using FGShop.DtoLayer.AuthDtos;
+using FGShop.DtoLayer.BasketDtos;
 using FGShop.DtoLayer.CategoryDtos;
 using FGShop.DtoLayer.ColorDtos;
 using FGShop.DtoLayer.ContactDtos;
 using FGShop.DtoLayer.ImageDtos;
+using FGShop.DtoLayer.OrderDtos;
 using FGShop.DtoLayer.ProductDtos;
 using FGShop.DtoLayer.ProducthasCategoryDtos;
 using FGShop.DtoLayer.ProducthasColorDtos;
@@ -13,7 +15,9 @@ using FGShop.DtoLayer.ProducthasStockDtos;
 using FGShop.DtoLayer.ProucthasSizeDtos;
 using FGShop.DtoLayer.SizeDtos;
 using FGShop.DtoLayer.SliderDtos;
+using FGShop.DtoLayer.StatusDtos;
 using FGShop.DtoLayer.StockDtos;
+using FGShop.DtoLayer.UserAddressDtos;
 using FGShop.EntityLayer.Entities;
 
 
@@ -116,6 +120,30 @@ namespace FGShop.BussinessLayer.Mappings.AutoMapper
 
 			CreateMap<ApplicationUser, UserRegisterDto>().ReverseMap();
 			CreateMap<ApplicationUser, UserLoginDto>().ReverseMap();
-		}
+
+            CreateMap<UserAddress, ResultUserAddressDto>().ReverseMap();
+            CreateMap<UserAddress, CreateUserAddressDto>().ReverseMap();
+            CreateMap<UserAddress, UpdateUserAddressDto>().ReverseMap();
+            CreateMap<ResultUserAddressDto, UpdateUserAddressDto>().ReverseMap();
+            CreateMap<CreateUserAddressDto, UpdateUserAddressDto>().ReverseMap();
+
+
+            CreateMap<Status, ResultStatusDto>().ReverseMap();
+            CreateMap<Status, CreateStatusDto>().ReverseMap();
+            CreateMap<Status, UpdateStatusDto>().ReverseMap();
+            CreateMap<ResultStatusDto, UpdateStatusDto>().ReverseMap();
+
+			CreateMap<Basket, ResultBasketDto>().ReverseMap();
+			CreateMap<Basket, CreateBasketDto>().ReverseMap();
+			CreateMap<Basket, UpdateBasketDto>().ReverseMap();
+			CreateMap<Basket, GetByBasketIdDto>().ReverseMap();
+			CreateMap<Basket, List<ResultBasketDto>>().ReverseMap();
+
+
+            CreateMap<Order, ResultOrderDto>().ReverseMap();
+            CreateMap<Order, CreateOrderDto>().ReverseMap();
+            CreateMap<Order, UpdateOrderDto>().ReverseMap();
+            CreateMap<ResultOrderDto, UpdateOrderDto>().ReverseMap();
+        }
     }
 }

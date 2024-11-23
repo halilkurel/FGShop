@@ -137,10 +137,11 @@ namespace FGShop.BussinessLayer.Services
                 // Kullanıcıyı bul ve rolünü al
                 var user = await _userManager.FindByNameAsync(dto.UserName);
                 var roles = await _userManager.GetRolesAsync(user);
+                var userId = Convert.ToString(user.Id);
                 if (user != null)
                 {
                     // Token'ı oluştur
-                    var token = _tokenService.TokenCreate(user.UserName, roles[0]);
+                    var token = _tokenService.TokenCreate(user.UserName, roles[0],userId);
 
                     return new Response<UserLoginDto>(ResponseType.Success, new UserLoginDto
                     {

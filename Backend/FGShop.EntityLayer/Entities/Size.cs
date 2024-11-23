@@ -8,7 +8,8 @@ namespace FGShop.EntityLayer.Entities
 {
     public class Size:BaseEntity
     {
-        public string SizeName { get; set; }
-        public ICollection<ProducthasSize> producthasSizes { get; set; }
+        public string? SizeName { get; set; }
+        public ICollection<ProducthasSize>? producthasSizes { get; set; }
+        public ICollection<Order>? Orders { get; set; }
     }
 }

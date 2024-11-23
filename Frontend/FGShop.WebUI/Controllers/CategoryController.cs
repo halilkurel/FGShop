@@ -1,7 +1,9 @@
-﻿using FGShop.WebUI.Models.CategoryModels;
+﻿using FGShop.WebUI.Models.CartModels;
+using FGShop.WebUI.Models.CategoryModels;
 using FGShop.WebUI.Models.ProducthasCategoryModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace FGShop.WebUI.Controllers
 {
@@ -16,6 +18,20 @@ namespace FGShop.WebUI.Controllers
         public async Task<IActionResult> Index()
         {
             var client = _httpClientFactory.CreateClient();
+
+
+            //Cart Verileri Getirme
+
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = Convert.ToInt32(userIdClaim);
+
+            var response = await client.GetAsync($"https://localhost:7171/api/EFBaskets/{userId}");
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var cart = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetCartDetailList>>(jsonString);
+            ViewBag.Cart = cart;
+
+
             var responseMessage = await client.GetAsync("https://localhost:7171/api/Categories");
             if (responseMessage.IsSuccessStatusCode)
             {

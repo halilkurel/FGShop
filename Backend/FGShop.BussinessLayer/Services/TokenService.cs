@@ -18,7 +18,7 @@ namespace FGShop.BussinessLayer.Services
             _configuration = configuration;
         }
 
-        public string TokenCreate(string userName,string role)
+        public string TokenCreate(string userName,string role, string userId)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aspnetcoreapiapiaspnetcoreapiapi"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -27,8 +27,9 @@ namespace FGShop.BussinessLayer.Services
             {
             new Claim(JwtRegisteredClaimNames.Sub, userName),
             new Claim(ClaimTypes.Role, role),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+			new Claim(ClaimTypes.NameIdentifier, userId),
+			};
 
             var token = new JwtSecurityToken(
                 issuer: "http://localhost:7171",

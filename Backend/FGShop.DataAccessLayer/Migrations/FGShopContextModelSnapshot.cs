@@ -47,7 +47,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Abouts", (string)null);
+                    b.ToTable("Abouts");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.ApplicationRole", b =>
@@ -154,6 +154,42 @@ namespace FGShop.DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.Basket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SizeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Baskets");
+                });
+
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -171,7 +207,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Color", b =>
@@ -188,7 +224,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colors", (string)null);
+                    b.ToTable("Colors");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Contact", b =>
@@ -209,7 +245,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts", (string)null);
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Image", b =>
@@ -226,7 +262,51 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserAddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("SizeId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("UserAddressId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Product", b =>
@@ -255,7 +335,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.ProducthasCategory", b =>
@@ -278,7 +358,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProducthasCategories", (string)null);
+                    b.ToTable("ProducthasCategories");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.ProducthasColor", b =>
@@ -301,7 +381,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProducthasColors", (string)null);
+                    b.ToTable("ProducthasColors");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.ProducthasImage", b =>
@@ -324,7 +404,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProducthasImages", (string)null);
+                    b.ToTable("ProducthasImages");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.ProducthasSize", b =>
@@ -347,7 +427,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("ProducthasSizes", (string)null);
+                    b.ToTable("ProducthasSizes");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.ProducthasStock", b =>
@@ -370,7 +450,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasIndex("StockId");
 
-                    b.ToTable("producthasStocks", (string)null);
+                    b.ToTable("producthasStocks");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Size", b =>
@@ -382,12 +462,11 @@ namespace FGShop.DataAccessLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("SizeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sizes", (string)null);
+                    b.ToTable("Sizes");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Slider", b =>
@@ -412,7 +491,23 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sliders", (string)null);
+                    b.ToTable("Sliders");
+                });
+
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("StatusName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Stock", b =>
@@ -428,7 +523,44 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stocks", (string)null);
+                    b.ToTable("Stocks");
+                });
+
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.UserAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Neighbourhood")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserAddresses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -534,6 +666,76 @@ namespace FGShop.DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.Basket", b =>
+                {
+                    b.HasOne("FGShop.EntityLayer.Entities.Color", "Color")
+                        .WithMany()
+                        .HasForeignKey("ColorId");
+
+                    b.HasOne("FGShop.EntityLayer.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("FGShop.EntityLayer.Entities.Size", "Size")
+                        .WithMany()
+                        .HasForeignKey("SizeId");
+
+                    b.HasOne("FGShop.EntityLayer.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Size");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.Order", b =>
+                {
+                    b.HasOne("FGShop.EntityLayer.Entities.Color", "Color")
+                        .WithMany("Orders")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FGShop.EntityLayer.Entities.Size", "Size")
+                        .WithMany("Orders")
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FGShop.EntityLayer.Entities.Status", "Stasus")
+                        .WithMany("Orders")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FGShop.EntityLayer.Entities.UserAddress", "UserAddress")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FGShop.EntityLayer.Entities.ApplicationUser", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Size");
+
+                    b.Navigation("Stasus");
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserAddress");
+                });
+
             modelBuilder.Entity("FGShop.EntityLayer.Entities.ProducthasCategory", b =>
                 {
                     b.HasOne("FGShop.EntityLayer.Entities.Category", "Category")
@@ -556,7 +758,7 @@ namespace FGShop.DataAccessLayer.Migrations
             modelBuilder.Entity("FGShop.EntityLayer.Entities.ProducthasColor", b =>
                 {
                     b.HasOne("FGShop.EntityLayer.Entities.Color", "Color")
-                        .WithMany("producthasColors")
+                        .WithMany()
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -676,6 +878,11 @@ namespace FGShop.DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Category", b =>
                 {
                     b.Navigation("ProducthasCategories");
@@ -683,7 +890,7 @@ namespace FGShop.DataAccessLayer.Migrations
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Color", b =>
                 {
-                    b.Navigation("producthasColors");
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Image", b =>
@@ -706,12 +913,24 @@ namespace FGShop.DataAccessLayer.Migrations
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Size", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("producthasSizes");
+                });
+
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.Status", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Stock", b =>
                 {
                     b.Navigation("producthasSizes");
+                });
+
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.UserAddress", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,10 @@
-﻿using FGShop.WebUI.Models.ContactModels;
+﻿using FGShop.WebUI.Models.CartModels;
+using FGShop.WebUI.Models.ContactModels;
 using FGShop.WebUI.Models.ValdiationModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,8 +19,22 @@ namespace FGShop.WebUI.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
+            //Cart Verileri Getirme
+            var client = _httpClientFactory.CreateClient();
+
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = Convert.ToInt32(userIdClaim);
+
+            var response = await client.GetAsync($"https://localhost:7171/api/EFBaskets/{userId}");
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var cart = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetCartDetailList>>(jsonString);
+            ViewBag.Cart = cart;
+
+
             return View();
         }
 

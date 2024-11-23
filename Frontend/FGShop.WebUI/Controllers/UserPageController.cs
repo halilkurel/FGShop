@@ -1,4 +1,5 @@
 ﻿using FGShop.WebUI.Models.AboutModels;
+using FGShop.WebUI.Models.CartModels;
 using FGShop.WebUI.Models.UserModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -21,7 +22,19 @@ namespace FGShop.WebUI.Controllers
 		{
 			var client = _httpClientFactory.CreateClient();
 
-			if (HttpContext.User.Identity.IsAuthenticated)
+
+            //Cart Verileri Getirme
+
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = Convert.ToInt32(userIdClaim);
+
+            var response = await client.GetAsync($"https://localhost:7171/api/EFBaskets/{userId}");
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var cart = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetCartDetailList>>(jsonString);
+            ViewBag.Cart = cart;
+
+            if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				// Kullanıcının adını al
 				var userName = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;

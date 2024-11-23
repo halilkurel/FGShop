@@ -9,6 +9,6 @@ namespace FGShop.BussinessLayer.Interfaces
 {
     public interface ITokenService
     {
-        string TokenCreate(string userName, string role);
+        string TokenCreate(string userName, string role, string id);
     }
 }

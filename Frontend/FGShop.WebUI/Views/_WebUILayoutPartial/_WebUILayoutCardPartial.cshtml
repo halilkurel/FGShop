@@ -1,84 +1,105 @@
-﻿	<!-- Cart -->
+﻿@{
+    var cart = ViewBag.Cart as List<FGShop.WebUI.Models.CartModels.GetCartDetailList>;
+}
+
+<!-- Cart -->
 <div class="wrap-header-cart js-panel-cart">
-	<div class="s-full js-hide-cart"></div>
+    <div class="s-full js-hide-cart"></div>
 
-	<div class="header-cart flex-col-l p-l-65 p-r-25">
-		<div class="header-cart-title flex-w flex-sb-m p-b-8">
-			<span class="mtext-103 cl2">
-				Sepetim
-			</span>
+    <div class="header-cart flex-col-l p-l-65 p-r-25">
+        <div class="header-cart-title flex-w flex-sb-m p-b-8">
+            <span class="mtext-103 cl2">
+                Sepetim
+            </span>
 
-			<div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart">
-				<i class="zmdi zmdi-close"></i>
-			</div>
-		</div>
+            <div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart">
+                <i class="zmdi zmdi-close"></i>
+            </div>
+        </div>
 
-		<div class="header-cart-content flex-w js-pscroll">
-			<ul class="header-cart-wrapitem w-full">
-				<li class="header-cart-item flex-w flex-t m-b-12">
-					<div class="header-cart-item-img">
-						<img src="~/cozastore-master/images/item-cart-01.jpg" alt="IMG">
-					</div>
+        <div class="header-cart-content flex-w js-pscroll">
+            <ul class="header-cart-wrapitem w-full">
+                @if (cart != null && cart.Any())
+                {
+                    @foreach (var item in cart)
+                    {
+                        <li class="header-cart-item flex-w flex-t m-b-12">
+                            <button type="submit" id="remove-product" data-id="@item.Id">
+                                <div class="header-cart-item-img">
 
-					<div class="header-cart-item-txt p-t-8">
-						<a href="~/cozastore-master/#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-							Beyaz Gömlek Plise
-						</a>
+                                    <img src="@item.CoverPhoto" alt="IMG">
 
-						<span class="header-cart-item-info">
-							1 x 190.00 TL
-						</span>
-					</div>
-				</li>
 
-				<li class="header-cart-item flex-w flex-t m-b-12">
-					<div class="header-cart-item-img">
-						<img src="~/cozastore-master/images/item-cart-02.jpg" alt="IMG">
-					</div>
+                                </div>
+                            </button>
 
-					<div class="header-cart-item-txt p-t-8">
-						<a href="~/cozastore-master/#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-							Converse Tüm Yıldız
-						</a>
+                            <div class="header-cart-item-txt p-t-8">
+                                <a href="~/cozastore-master/#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                                    @item.ProductName
+                                </a>
 
-						<span class="header-cart-item-info">
-							1 x 390.00 TL
-						</span>
-					</div>
-				</li>
+                                <span class="header-cart-item-info">
+                                    @item.OrderQuantity x @item.Price TL
+                                </span>
+                            </div>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <p>Sepetinizde ürün bulunmamaktadır.</p>
+                }
+            </ul>
 
-				<li class="header-cart-item flex-w flex-t m-b-12">
-					<div class="header-cart-item-img">
-						<img src="~/cozastore-master/images/item-cart-03.jpg" alt="IMG">
-					</div>
 
-					<div class="header-cart-item-txt p-t-8">
-						<a href="~/cozastore-master/#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
-							Nixon Porter Deri
-						</a>
+            <div class="w-full">
+                <div class="header-cart-total w-full p-tb-40">
+                    Toplam: @(cart != null ? cart.Sum(x => x.OrderQuantity * x.Price) : 0) TL
+                </div>
 
-						<span class="header-cart-item-info">
-							1 x 170.00 TL
-						</span>
-					</div>
-				</li>
-			</ul>
+                <div class="header-cart-buttons flex-w w-full">
+                    <a href="/ShoppingCard/Index" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+                        Sepeti Görüntüle
+                    </a>
 
-			<div class="w-full">
-				<div class="header-cart-total w-full p-tb-40">
-					Toplam: 750.00 TL
-				</div>
-
-				<div class="header-cart-buttons flex-w w-full">
-					<a href="~/cozastore-master/shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
-						Sepeti Görüntüle
-					</a>
-
-					<a href="~/cozastore-master/shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
-						Çık
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <a href="~/cozastore-master/shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
+                        Çık
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).on('click', '#remove-product', function (e) {
+        e.preventDefault();
+
+
+        var basketId = $(this).data('id'); // Ürün ID'sini alıyoruz
+
+        var row = $(this).closest('li');
+
+        $.ajax({
+            url: '@Url.Action("RemoveBasket", "Cart", new { id = "__id__" })'.replace('__id__', basketId),
+            type: 'DELETE',
+            success: function (response) {
+                if (response.success) {
+                    row.remove(); // Satırı kaldırıyoruz
+                } else {
+                    alert(response.message || "Silinirken bir hata oluştu.");
+                }
+            },
+            error: function () {
+                alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+            }
+        });
+    });
+
+
+</script>
+
+
