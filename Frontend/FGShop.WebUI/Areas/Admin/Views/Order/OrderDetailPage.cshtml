@@ -1,0 +1,207 @@
+﻿@model ResultEFOrderModel
+
+@{
+    ViewData["Title"] = "OrderDetailPage";
+    Layout = "~/Areas/Admin/Views/AdminUILayout/Index.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/owlcarousel.css">
+<link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/rating.css">
+<style>
+    th {
+        padding: 20px;
+    }
+
+    tr {
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+        tr :first-child {
+            margin-top: 20px;
+        }
+</style>
+
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-6">
+                    <h4>Sipariş Detay Sayfası</h4>
+                </div>
+                <div class="col-6">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">
+                                <svg class="stroke-icon">
+                                    <use href="/Riho-Bootstrap-Admin/admin/assets/svg/icon-sprite.svg#stroke-home"></use>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">FGShop</li>
+                        <li class="breadcrumb-item active">Sipariş Detay Sayfası</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid starts-->
+    <div class="container-fluid">
+        <div>
+            <div class="row product-page-main p-0">
+                @await Component.InvokeAsync("_OrderProductImageComponentPartial", new { id = Model.GetByProductId.Id })
+                <div class="col-xxl-5 box-col-6 order-xxl-0 order-1">
+                    <div class="card">
+                        <div class="card-body">
+                            @await Component.InvokeAsync("_OrderProductDetailComponentPartial", new { id = Model.GetByProductId.Id })
+                            <hr>
+                            @await Component.InvokeAsync("_OrderProductColorComponentPartial", new { id = Model.GetByColorId.Id })
+                            <hr>
+                            <div>
+                                <table class="product-page-width">
+                                    <tbody>
+                                        <tr>
+                                            @await Component.InvokeAsync("_OrderProductSizeComponentPartial", new { id = Model.GetBySizeId.Id })
+                                        </tr>
+                                        <tr>
+                                            <td> <b>Sipariş Adeti : </b></td>
+
+                                            <td> <span style="color:blue">@Model.GetByOrderId.OrderQuantity</span></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <h3><b>Sipariş Veren Kullanıcının Bilgileri</b></h3>
+                                <table>
+                                    <tr>
+                                        <th>Kullanıcı Adı:</th>
+                                        <td>@Model.UserList.Username</td>
+                                    </tr>
+                                    <tr>
+                                        <th>İsim Soyisim:</th>
+                                        <td>@Model.UserList.Name @Model.UserList.Surname</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Telefon Numarası:</th>
+                                        <td>@Model.UserList.PhoneNumber</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mail Adresi:</th>
+                                        <td>@Model.UserList.Email</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-3 col-md-6 box-col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- side-bar colleps block stat-->
+                            @await Component.InvokeAsync("_ProductProductCategoryComponentPartial", new { id = Model.GetByProductId.Id })
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="collection-filter-block">
+                                <h3><b>Sipariş Adresi</b></h3>
+                                <table>
+                                    <tr>
+                                        <th>Ülke:</th>
+                                        <td>@Model.ResultUserAddress.Country</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Şehir:</th>
+                                        <td>@Model.ResultUserAddress.City</td>
+                                    </tr>
+                                    <tr>
+                                        <th>İlçe:</th>
+                                        <td>@Model.ResultUserAddress.District</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Mahalle:</th>
+                                        <td>@Model.ResultUserAddress.Neighbourhood</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Adres:</th>
+                                        <td>@Model.ResultUserAddress.Address</td>
+                                    </tr>
+                                </table>
+                                @if(Model.ResultStatus.Id == 4)
+                                {
+                                    <a href="@Url.Action("StatusConfirmed", "Order", new { area="Admin" ,orderId = Model.GetByOrderId.Id })" class="btn btn-primary mt-2">Siparişi Onayla</a>
+                                }
+
+                                @if (Model.ResultStatus.Id == 4)
+                                {
+                                    <a href="@Url.Action("CancelOrder", "Order", new { area="Admin" ,orderId = Model.GetByOrderId.Id })" class="btn btn-danger mt-2">Siparişi İptal Et</a>
+                                }
+                                @if (Model.ResultStatus.Id == 5)
+                                {
+                                    <a href="@Url.Action("CancelOrder", "Order", new { area="Admin" ,orderId = Model.GetByOrderId.Id })" class="btn btn-danger mt-2">Siparişi İptal Et</a>
+                                }
+                                @if (Model.ResultStatus.Id == 5)
+                                {
+                                    <a href="@Url.Action("CompletetheOrder", "Order", new { area="Admin" ,orderId = Model.GetByOrderId.Id })" class="btn btn-primary mt-2">Sipariş Tamamlandı</a>
+                                }
+                                @if (Model.ResultStatus.Id == 7)
+                                {
+                                    <a href="@Url.Action("StatusConfirmed", "Order", new { area="Admin" ,orderId = Model.GetByOrderId.Id })" class="btn btn-primary mt-2">Siparişi Tekrar Onayla</a>
+                                }
+
+                            </div>
+                        </div>
+                        <!-- silde-bar colleps block end here-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid Ends-->
+</div>
+
+
+@* sayfa tamamlandı. Status Değişimi yapılacak *@
+
+
+<!-- Script Js-->
+<script src="/Riho-Bootstrap-Admin/assets/js/js-datatables/simple-datatables@latest.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/custom-list-product.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/owlcarousel/owl.carousel.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/ecommerce.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/tooltip-init.js"></script>
+
+<!-- latest jquery-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/jquery.min.js"></script>
+<!-- Bootstrap js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+<!-- feather icon js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/icons/feather-icon/feather.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/icons/feather-icon/feather-icon.js"></script>
+<!-- scrollbar js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/scrollbar/simplebar.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/scrollbar/custom.js"></script>
+<!-- Sidebar jquery-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/config.js"></script>
+<!-- Plugins JS start-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/sidebar-menu.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/sidebar-pin.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/slick/slick.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/slick/slick.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/header-slick.js"></script>
+<!-- calendar js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/js-datatables/simple-datatables@latest.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/custom-list-product.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/owlcarousel/owl.carousel.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/ecommerce.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/tooltip-init.js"></script>
+<!-- Plugins JS Ends-->
+<!-- Theme js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/script.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/theme-customizer/customizer.js"></script>>
+

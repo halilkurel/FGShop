@@ -9,6 +9,7 @@ namespace FGShop.EntityLayer.Entities
     public class Order: BaseEntity
     {
         public int UserId { get; set; }
+        public int? ProductId { get; set; }
         public int OrderQuantity { get; set; }
         public int SizeId { get; set; }
         public int ColorId { get; set; }
@@ -22,6 +23,7 @@ namespace FGShop.EntityLayer.Entities
         public Color? Color { get; set; }
         public Status? Stasus { get; set; }
         public UserAddress? UserAddress { get; set; }
+        public Product? Product { get; set; }
 
 
     }

@@ -11,5 +11,8 @@
         public string? District { get; set; }
         public string? Neighbourhood { get; set; }
         public string? Address { get; set; }
+
+
+
     }
 }

@@ -9,6 +9,7 @@ namespace FGShop.DtoLayer.OrderDtos
     public class ResultOrderDto
     {
         public int Id { get; set; }
+        public int ProductId { get; set; }
         public int UserId { get; set; }
         public int OrderQuantity { get; set; }
         public int SizeId { get; set; }

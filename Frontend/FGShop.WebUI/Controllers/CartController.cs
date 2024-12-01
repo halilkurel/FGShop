@@ -194,6 +194,7 @@ namespace FGShop.WebUI.Controllers
 						
                         var order = new CreateOrderApiModel
                         {
+							ProductId= item.ProductId,
                             ColorId = item.ColorId,
                             OrderQuantity = item.OrderQuantity,
                             SizeId = item.SizeId,
@@ -269,6 +270,7 @@ namespace FGShop.WebUI.Controllers
                     {
                         var order = new CreateOrderApiModel
                         {
+                            ProductId = item.ProductId,
                             ColorId = item.ColorId,
                             OrderQuantity = item.OrderQuantity,
                             SizeId = item.SizeId,

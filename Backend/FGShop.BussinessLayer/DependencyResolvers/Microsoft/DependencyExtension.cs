@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FGShop.BussinessLayer.EntityFremawork.EfOrder;
+using FGShop.BussinessLayer.EntityFremawork.EFOrder;
 using FGShop.BussinessLayer.EntityFremawork.EFProduct;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasCategory;
 using FGShop.BussinessLayer.EntityFremawork.EfProducthasColor;
@@ -183,6 +184,7 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddScoped<IEFProductService, EFProductService>();
             services.AddScoped<IEFBasketService, EFBasketService>();
             services.AddScoped<IEFUserAddressService, EFUserAddressService>();
+            services.AddScoped<IEFOrderService, EFOrderService>();
 
 
 

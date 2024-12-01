@@ -48,7 +48,7 @@ namespace FGShop.BussinessLayer.EntityFremawork.EfOrder
 				Id= basket.Id,
 				ProductId = basket.ProductId,
 				OrderQuantity = basket.OrderQuantity,
-				Price = basket.Product.Price, // `Product` ilişkisi üzerinden `Price` alınır
+				Price = basket.Product.Price, 
 				ColorId = basket.ColorId,
 				SizeId = basket.SizeId,
 				ProductName = basket.Product.ProductName,

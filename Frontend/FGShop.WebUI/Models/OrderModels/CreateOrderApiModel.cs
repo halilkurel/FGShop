@@ -2,6 +2,7 @@
 {
     public class CreateOrderApiModel
     {
+        public int ProductId { get; set; }
         public int UserId { get; set; }
         public int OrderQuantity { get; set; }
         public int SizeId { get; set; }

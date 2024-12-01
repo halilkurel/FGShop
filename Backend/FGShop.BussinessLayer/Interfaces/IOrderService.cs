@@ -15,5 +15,8 @@ namespace FGShop.BussinessLayer.Interfaces
         Task<IResponse<IDto>> GetById<IDto>(int id);
         Task<IResponse> Remove(int id);
         Task<IResponse<UpdateOrderDto>> Update(UpdateOrderDto dto);
+        Task StatusConfirmed(int orderId);
+        Task CancelOrder(int orderId);
+        Task CompletetheOrder(int orderId);
     }
 }

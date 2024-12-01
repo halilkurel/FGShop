@@ -21,6 +21,7 @@ namespace FGShop.EntityLayer.Entities
         public ICollection<ProducthasSize> producthasSizes { get; set; }
         public ICollection<ProducthasColor> ProducthasColors { get; set; }
         public ICollection<ProducthasStock> ProducthasStocks { get; set; }
+        public ICollection<Order> Orders { get; set; }
 
 
 

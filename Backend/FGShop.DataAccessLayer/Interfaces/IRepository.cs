@@ -15,6 +15,7 @@ namespace FGShop.DataAccessLayer.Interfaces
         Task<T> GetByFilter(Expression<Func<T, bool>> filter, bool asNoTraking= false);
         Task Create(T entity);
         void Update(T entity, T unchanged);
+        void Update(T entity);
         void Remove(T entity);
         IQueryable<T> GetQuery();
 

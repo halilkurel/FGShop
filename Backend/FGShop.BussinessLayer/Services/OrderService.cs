@@ -4,6 +4,7 @@ using FGShop.BussinessLayer.Interfaces;
 using FGShop.CommanLayer;
 using FGShop.DataAccessLayer.Context;
 using FGShop.DataAccessLayer.UnitOfWork;
+using FGShop.DtoLayer.Interfaces;
 using FGShop.DtoLayer.OrderDtos;
 using FGShop.EntityLayer.Entities;
 using FluentValidation;
@@ -81,6 +82,47 @@ namespace FGShop.BussinessLayer.Services
                 return new Response(ResponseType.NotFound, $"{id} ye ait data bulunamadı");
             }
         }
+        
+        public async Task StatusConfirmed(int orderId)
+        {
+            var repository = _uow.GetRepository<Order>();
+
+            // Güncellenmesi gereken kaydı bul
+            var entity = await repository.GetByFilter(x => x.Id == orderId);
+
+            if (entity == null)
+            {
+                throw new Exception("Order not found."); // Hata kontrolü
+            }
+
+            // Sadece StatusId'yi güncelle
+            entity.StatusId = 5;
+            repository.Update(entity);
+
+            // Değişiklikleri kaydet
+            await _uow.SaveChanges();
+        }
+
+
+        public async Task CancelOrder(int orderId)
+        {
+            var repository = _uow.GetRepository<Order>();
+
+            // Güncellenmesi gereken kaydı bul
+            var entity = await repository.GetByFilter(x => x.Id == orderId);
+
+            if (entity == null)
+            {
+                throw new Exception("Order not found."); // Hata kontrolü
+            }
+
+            // Sadece StatusId'yi güncelle
+            entity.StatusId = 7;
+            repository.Update(entity);
+
+            // Değişiklikleri kaydet
+            await _uow.SaveChanges();
+        }
 
         public async Task<IResponse<UpdateOrderDto>> Update(UpdateOrderDto dto)
         {
@@ -101,6 +143,26 @@ namespace FGShop.BussinessLayer.Services
             {
                 return new Response<UpdateOrderDto>(ResponseType.ValidationError, dto, result.CovertToCustomValidationError());
             }
+        }
+
+        public async Task CompletetheOrder(int orderId)
+        {
+            var repository = _uow.GetRepository<Order>();
+
+            // Güncellenmesi gereken kaydı bul
+            var entity = await repository.GetByFilter(x => x.Id == orderId);
+
+            if (entity == null)
+            {
+                throw new Exception("Order not found."); // Hata kontrolü
+            }
+
+            // Sadece StatusId'yi güncelle
+            entity.StatusId = 6;
+            repository.Update(entity);
+
+            // Değişiklikleri kaydet
+            await _uow.SaveChanges();
         }
     }
 }

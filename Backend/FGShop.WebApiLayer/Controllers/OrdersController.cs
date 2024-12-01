@@ -36,6 +36,29 @@ namespace FGShop.WebApiLayer.Controllers
 
             return Ok(response);
         }
+        
+
+        [HttpGet("StatusConfirmed/{id}")]
+        public async Task<IActionResult> StatusConfirmed(int id)
+        {
+            await _service.StatusConfirmed(id);
+            return Ok();
+        }
+
+        [HttpGet("CancelOrder/{id}")]
+        public async Task<IActionResult> CancelOrder(int id)
+        {
+            await _service.CancelOrder(id);
+            return Ok();
+        }
+
+        [HttpGet("CompletetheOrder/{id}")]
+        public async Task<IActionResult> CompletetheOrder(int id)
+        {
+            await _service.CompletetheOrder(id);
+            return Ok();
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(int id)
@@ -80,5 +103,7 @@ namespace FGShop.WebApiLayer.Controllers
 
             return Ok(response);
         }
+
+
     }
 }

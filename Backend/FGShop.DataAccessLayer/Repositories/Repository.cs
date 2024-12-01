@@ -56,5 +56,9 @@ namespace FGShop.DataAccessLayer.Repositories
             _context.Entry(unchanged).CurrentValues.SetValues(entity);
         }
 
+        public void Update(T entity)
+        {
+            _context.Set<T>().Update(entity);
+        }
     }
 }

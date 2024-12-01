@@ -282,6 +282,9 @@ namespace FGShop.DataAccessLayer.Migrations
                     b.Property<int>("OrderQuantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("SizeId")
                         .HasColumnType("int");
 
@@ -297,6 +300,8 @@ namespace FGShop.DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ColorId");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("SizeId");
 
@@ -701,6 +706,10 @@ namespace FGShop.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FGShop.EntityLayer.Entities.Product", "Product")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductId");
+
                     b.HasOne("FGShop.EntityLayer.Entities.Size", "Size")
                         .WithMany("Orders")
                         .HasForeignKey("SizeId")
@@ -726,6 +735,8 @@ namespace FGShop.DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Color");
+
+                    b.Navigation("Product");
 
                     b.Navigation("Size");
 
@@ -900,6 +911,8 @@ namespace FGShop.DataAccessLayer.Migrations
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Product", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("ProducthasCategories");
 
                     b.Navigation("ProducthasColors");
