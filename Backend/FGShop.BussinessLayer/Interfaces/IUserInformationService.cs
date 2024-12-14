@@ -10,5 +10,6 @@ namespace FGShop.BussinessLayer.Interfaces
 	public interface IUserInformationService
 	{
 		Task<UserListDto> GetByUserName(string userName);
+		Task<string> GetByUserId(int id);
 	}
 }

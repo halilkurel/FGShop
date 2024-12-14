@@ -1,4 +1,4 @@
-﻿using FGShop.BussinessLayer.EntityFremawork.EfProducthasColor;
+﻿using FGShop.BussinessLayer.EntityFremawork.EFProducthasImage;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasSize;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,26 +11,19 @@ namespace FGShop.WebApiLayer.Controllers
     {
         private readonly IEFProducthasSizeService _service;
 
-        public EFProducthasSizesController(IEFProducthasSizeService service)
+        public EFProducthasSizesController(IEFProducthasSizeService producthasSizeService)
         {
-            _service = service;
+            _service = producthasSizeService;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByProductIdColorList(int id)
+        public async Task<IActionResult> GetByProductIdList(int id)
         {
-            var response = await _service.GetByProductIdSize(id);
+            var response = await _service.GetByProductId(id);
 
             return Ok(response);
         }
 
-        [HttpGet("GetByProductIdProducthasSizeList/{id}")]
-        public async Task<IActionResult> GetByProductIdProducthasSizeList(int id)
-        {
-            var response = await _service.GetByProductIdSProducthasSizeList(id);
-
-            return Ok(response);
-        }
 
     }
 }

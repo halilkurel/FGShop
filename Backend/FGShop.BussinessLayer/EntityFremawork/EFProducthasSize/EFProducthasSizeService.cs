@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using FGShop.DataAccessLayer.Context;
-using FGShop.DtoLayer.ProucthasSizeDtos;
+﻿using FGShop.DataAccessLayer.Context;
+using FGShop.DtoLayer.EFProducthasColorAndSizeDto;
+using FGShop.DtoLayer.ProducthasColorAndProducthasSizeDtos;
 using FGShop.DtoLayer.SizeDtos;
-using FGShop.EntityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,43 +11,31 @@ using System.Threading.Tasks;
 
 namespace FGShop.BussinessLayer.EntityFremawork.EFProducthasSize
 {
-    public class EFProducthasSizeService: IEFProducthasSizeService
+    public class EFProducthasSizeService : IEFProducthasSizeService
     {
         private readonly FGShopContext _context;
-        private readonly IMapper _mapper;
 
-        public EFProducthasSizeService(FGShopContext context, IMapper mapper)
+        public EFProducthasSizeService(FGShopContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<List<ResultSizeDto>> GetByProductIdSize(int id)
+        public async Task<List<ResultSizeDto>> GetByProductId(int productId)
         {
+            var result = await _context.producthasColorAndSizes
+                .Where(x => x.ProducthasColor.ProductId == productId)
+                .GroupBy(y => new { y.SizeId, y.Size.SizeName }) // Benzersiz grupla
+                .Select(g => new ResultSizeDto
+                {
+                    
+                    Id = g.Key.SizeId,
+                    SizeName = g.Key.SizeName
+                })
+                .ToListAsync();
 
-            var producthasSizeList = await _context.Set<ProducthasSize>()
-                                                    .Where(x => x.ProductId == id).ToListAsync();
-                                                    
-
-            var sizeIds = producthasSizeList.Select(x => x.SizeId).ToList();
-
-
-            var sizes = await _context.Set<Size>()
-                                        .Where(image => sizeIds.Contains(image.Id))
-                                        .ToListAsync();
-
-
-            var list = _mapper.Map<List<ResultSizeDto>>(sizes);
-            return list;
+            return result;
         }
 
-        public async Task<List<ResultProducthasSizeDto>> GetByProductIdSProducthasSizeList(int id)
-        {
-            var producthasSizeList = await _context.Set<ProducthasSize>()
-                                        .Where(x => x.ProductId == id).ToListAsync();
 
-            var list = _mapper.Map<List<ResultProducthasSizeDto>>(producthasSizeList);
-            return list;
-        }
     }
 }

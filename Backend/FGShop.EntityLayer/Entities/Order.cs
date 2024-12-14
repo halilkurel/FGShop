@@ -8,22 +8,27 @@ namespace FGShop.EntityLayer.Entities
 {
     public class Order: BaseEntity
     {
-        public int UserId { get; set; }
-        public int? ProductId { get; set; }
-        public int OrderQuantity { get; set; }
-        public int SizeId { get; set; }
-        public int ColorId { get; set; }
-        public int StatusId { get; set; }
-        public int UserAddressId { get; set; }
-        public DateTime OrderDate { get; set; }
+        public string? UserName { get; set; }
+        public string? ProductName { get; set; }
+        public int? OrderQuantity { get; set; }
+        public string? SizeName { get; set; }
+        public string? ColorName { get; set; }
+        public int? StatusId { get; set; }
+        public DateTime? OrderDate { get; set; }
 
 
-        public ApplicationUser? User { get; set; }
-        public Size? Size { get; set; }
-        public Color? Color { get; set; }
-        public Status? Stasus { get; set; }
-        public UserAddress? UserAddress { get; set; }
-        public Product? Product { get; set; }
+        //Adress bilgileri
+		public string? Email { get; set; }
+		public string? PhoneNumber { get; set; }
+		public string? Country { get; set; }
+		public string? City { get; set; }
+		public string? District { get; set; }
+		public string? Neighbourhood { get; set; }
+		public string? Address { get; set; }
+
+
+
+		public Status? Status { get; set; }
 
 
     }

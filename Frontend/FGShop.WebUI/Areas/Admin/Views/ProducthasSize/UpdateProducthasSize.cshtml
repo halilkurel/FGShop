@@ -1,20 +1,17 @@
-﻿@model UpdateProducthasSizeModel
+﻿
 @{
     ViewData["Title"] = "UpdateProducthasSize";
     Layout = "~/Areas/Admin/Views/AdminUILayout/Index.cshtml";
-}
+    var colors = ViewBag.Colors as List<ResultEFProducthasColorModel>;
+    var size = ViewBag.Sizes as List<SizeResult>;
+    var producthasColorandSize = ViewBag.SelectedSizes as List<ResultEFProducthasColorAndSizeModel>;
 
-
-@{
-    var sizes = ViewBag.Sizes as ResultSizeModel;  // ViewBag.Sizes'ı uygun bir modele cast edin.
-    var selectedSizes = ViewBag.SelectedSizes as List<SizeResult>;  // ViewBag.SelectedSizes'ı uygun bir modele cast edin.
 }
 
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/quill.snow.css">
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/intltelinput.min.css">
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/tagify.css">
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/flatpickr/flatpickr.min.css">
-
 
 <div class="page-body">
     <div class="container-fluid">
@@ -23,32 +20,36 @@
                 <div class="card">
                     <div class="card-body">
                         <div id="alert-container"></div>
-                        <form id="size-form" method="post" enctype="multipart/form-data" asp-action="UpdateProducthasSize">
+                        <form id="product-form" method="post" action="/Admin/ProducthasSize/UpdateProducthasSize">
                             <div class="form theme-form">
-                                <input type="hidden" asp-for="ProductId" value="@ViewBag.ProductId" />
-                                <div class="form-group">
-                                    <label for="sizes">Renkler</label>
+                                @foreach (var color in colors)
+                                {
+                                    <div class="row color-group">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="size-select-@color.Id">@color.ColorName</label>
+                                                <input type="hidden" name="ProducthasColorId" value="@color.Id" />
+                                                <input type="hidden" name="ProductId" value="@ViewBag.ProductId" />
+                                                <select class="form-select input-air-primary digits size-select" id="size-select-@color.Id" name="SizeId" multiple="">
+                                                    @foreach (var item in size)
+                                                    {
+                                                        var selected = producthasColorandSize.FirstOrDefault(selected =>
+                                                        selected.ColorName == color.ColorName && selected.SizeNames == item.SizeName);
+                                                        bool isSelected = selected != null;
+                                                        int selectedId = selected?.ProducthasColorAndSizeId ?? 0;
+
+                                                        <option value="@item.Id" data-id="@selectedId" selected="@isSelected">@item.SizeName</option>
+                                                    }
 
 
-                                    <select asp-for="SizeId" class="form-control" multiple="multiple" id="sizes">
-                                        @foreach (var size in sizes.Data)
-                                        {
-                                            bool isSelected = selectedSizes.Any(selectedsize => selectedsize.Id == size.Id);
-
-                                            if (isSelected)
-                                            {
-                                                <option selected value="@size.Id">@size.SizeName</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@size.Id">@size.SizeName</option>
-                                            }
-                                        }
-                                    </select>
-                                </div>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                                 <div class="row">
                                     <div class="col text-end">
-                                        <button type="submit" class="btn btn-success me-3">Güncelle</button>
+                                        <button type="submit" class="btn btn-success me-3">Ekle</button>
                                         <a class="btn btn-danger" href="/Admin/Product/Index">İptal</a>
                                     </div>
                                 </div>
@@ -83,41 +84,62 @@
 <!-- Theme js-->
 <script src="/Riho-Bootstrap-Admin/admin/assets/js/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
     $(document).ready(function () {
-        $('#size-form').on('submit', function (e) {
-            e.preventDefault(); // Formun varsayılan davranışını engelle
+        $('#product-form').submit(function (e) {
+            e.preventDefault();
 
-            var formData = new FormData(this);
+            const selectedSizes = [];
+            const deselectedSizes = [];
+            const productId = $('input[name="ProductId"]').val();
+
+            $('.color-group').each(function () {
+                const producthasColorId = $(this).find('input[name="ProducthasColorId"]').val();
+
+                $(this).find('.size-select option').each(function () {
+                    const sizeId = $(this).val();
+                    const producthasColorAndSizeId = $(this).data('id'); // Seçilen boyutun ID'si
+
+                    if ($(this).is(':selected')) {
+                        // Eğer seçilmişse
+                        selectedSizes.push({
+                            ProducthasColorAndSizeId: producthasColorAndSizeId || 0,
+                            ProducthasColorId: producthasColorId,
+                            SizeId: sizeId
+                        });
+                    } else if (producthasColorAndSizeId) {
+                        // Eğer kaldırılmışsa ve eski bir kayıtsa
+                        deselectedSizes.push({
+                            ProducthasColorAndSizeId: producthasColorAndSizeId
+                        });
+                    }
+                });
+            });
+
+            const data = {
+                SelectedSizes: selectedSizes,
+                DeselectedSizes: deselectedSizes,
+                ProductId : productId
+            };
 
             $.ajax({
-                type: 'POST',
                 url: '/Admin/ProducthasSize/UpdateProducthasSize',
-                data: formData,
-                contentType: false,
-                processData: false,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
                 success: function (response) {
-                    if (response.success) {
-                        window.location.href = response.redirectUrl;
-                    } else {
-                        $.each(response.errors, function (key, value) {
-                            var errorSpan = $('input[name="' + key + '"]').next('span');
-                            errorSpan.text(value);
-                        });
-
-                        if (response.errors.General) {
-                            $('#alert-container').html('<div class="alert alert-danger">' + response.errors.General + '</div>');
-                        }
-                    }
-                },
-                error: function () {
-                    $('#alert-container').html('<div class="alert alert-danger">Bilinmeyen bir hata oluştu.</div>');
+                    alert('Güncelleme başarılı!');
                     setTimeout(function () {
-                        $('#alert-container').html(''); // Mesajı temizler
-                    }, 5000);
+                        window.location.href = `/Admin/ProducthasStock/UpdateProducthasStock?id=${productId}`;
+                    }, 3000);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Hata:', error);
+                    alert('Güncelleme başarısız.');
                 }
             });
         });
     });
+
+
 </script>

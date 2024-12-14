@@ -4,6 +4,7 @@ using FGShop.BussinessLayer.EntityFremawork.EFOrder;
 using FGShop.BussinessLayer.EntityFremawork.EFProduct;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasCategory;
 using FGShop.BussinessLayer.EntityFremawork.EfProducthasColor;
+using FGShop.BussinessLayer.EntityFremawork.EFProducthasColorAndSize;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasImage;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasSize;
 using FGShop.BussinessLayer.EntityFremawork.EFProducthasStock;
@@ -20,14 +21,13 @@ using FGShop.BussinessLayer.ValidationRules.ContactValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ImageValidationRules;
 using FGShop.BussinessLayer.ValidationRules.OrderValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProducthasCategoryValidationRules;
+using FGShop.BussinessLayer.ValidationRules.ProducthasColorAndProducthasSizeStockRules;
+using FGShop.BussinessLayer.ValidationRules.ProducthasColorAndSizehasStockValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProducthasColorValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProducthasImageValidationRules;
-using FGShop.BussinessLayer.ValidationRules.ProducthasSizeValidationRules;
-using FGShop.BussinessLayer.ValidationRules.ProducthasStockValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProductValidationRules;
 using FGShop.BussinessLayer.ValidationRules.SizeValidationRules;
 using FGShop.BussinessLayer.ValidationRules.SliderValidationRules;
-using FGShop.BussinessLayer.ValidationRules.StockValidationRules;
 using FGShop.BussinessLayer.ValidationRules.UserAddressValidationRules;
 using FGShop.DataAccessLayer.Context;
 using FGShop.DataAccessLayer.UnitOfWork;
@@ -41,13 +41,12 @@ using FGShop.DtoLayer.ImageDtos;
 using FGShop.DtoLayer.OrderDtos;
 using FGShop.DtoLayer.ProductDtos;
 using FGShop.DtoLayer.ProducthasCategoryDtos;
+using FGShop.DtoLayer.ProducthasColorAndProducthasSizeDtos;
+using FGShop.DtoLayer.ProducthasColorAndSizehasStockDtos;
 using FGShop.DtoLayer.ProducthasColorDtos;
 using FGShop.DtoLayer.ProducthasImageDto;
-using FGShop.DtoLayer.ProducthasStockDtos;
-using FGShop.DtoLayer.ProucthasSizeDtos;
 using FGShop.DtoLayer.SizeDtos;
 using FGShop.DtoLayer.SliderDtos;
-using FGShop.DtoLayer.StockDtos;
 using FGShop.DtoLayer.UserAddressDtos;
 using FGShop.EntityLayer.Entities;
 using FluentValidation;
@@ -95,12 +94,6 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddTransient<IValidator<CreateProductDto>, CreateProductDtoValidator>();
             services.AddTransient<IValidator<UpdateProductDto>, UpdateProductDtoValidator>();
 
-            services.AddTransient<IValidator<CreateStockDto>, CreateStockDtoValidator>();
-            services.AddTransient<IValidator<UpdateStockDto>, UpdateStockDtoValidator>();
-
-            services.AddTransient<IValidator<CreateProducthasStockDto>, CreateProducthasStockDtoValidator>();
-            services.AddTransient<IValidator<UpdateProducthasStockDto>, UpdateProducthasStockDtoValidator>();
-
             services.AddTransient<IValidator<CreateCategoryDto>, CreateCategoryDtoValidator>();
             services.AddTransient<IValidator<UpdateCategoryDto>, UpdateCategoryDtoValidator>();
 
@@ -133,10 +126,6 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddTransient<IValidator<CreateSizeDto>, CreateSizeDtoValidator>();
             services.AddTransient<IValidator<UpdateSizeDto>, UpdateSizeDtoValidator>();
 
-
-            services.AddTransient<IValidator<CreateProducthasSizeDto>, CreateProducthasSizeDtoValidator>();
-            services.AddTransient<IValidator<UpdateProducthasSizeDto>, UpdateProducthasSizeDtoValidator>();
-
             services.AddTransient<IValidator<UserRegisterDto>, CreateRegisterDtoValidator>();
             services.AddTransient<IValidator<UserLoginDto>, CreateLoginValidationRules>();
 
@@ -148,6 +137,12 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
 
             services.AddTransient<IValidator<CreateOrderDto>, CreateOrderDtoValidator>();
             services.AddTransient<IValidator<UpdateOrderDto>, UpdateOrderDtoValidator>();
+
+			services.AddTransient<IValidator<CreateProducthasColorAndSizeDto>, CreateProducthasColorAndSizeDtoValidator>();
+			services.AddTransient<IValidator<UpdateProducthasColorAndSizeDto>, UpdateProducthasColorAndSizeDtoValidator>();
+
+            services.AddTransient<IValidator<CreateProducthasColorAndSizehasStockDto>, CreateProducthasColorAndSizehasStockValidator>();
+            services.AddTransient<IValidator<UpdateProducthasColorAndSizehasStockDto>, UpdateProducthasColorAndSizehasStockValidator>();
 
 
 
@@ -162,14 +157,14 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddScoped<IProducthasImageService, ProducthasImageService>();
             services.AddScoped<IProducthasCategoryService, ProducthasCategoryService>();
             services.AddScoped<IProducthasColorService, ProducthasColorService>();
-            services.AddScoped<IProducthasSizeService, ProducthasSizeService>();
-            services.AddScoped<IStockService, StockService>();
-            services.AddScoped<IProducthasStockService, ProducthasStockService>();
+
             services.AddScoped<IUserInformationService, UserInformationService>();
             services.AddScoped<IUserAddressService, UserAddressService>();
             services.AddScoped<IStatusService, StatusService>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IProducthasColorAndSizeService, ProducthasColorAndSizeDtoService>();
+            services.AddScoped<IProducthasColorAndSizehasStockService, ProducthasColorAndSizehasStockService>();
 
 
             
@@ -179,12 +174,13 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddScoped<IEFProducthasImageService, EFProducthasImageService>();
             services.AddScoped<IEfProducthasColorService, EfProducthasColorService>();
             services.AddScoped<IEFProducthasCategoryService, EFProducthasCategoryService>();
-            services.AddScoped<IEFProducthasSizeService, EFProducthasSizeService>();
-            services.AddScoped<IEFProducthasStockService, EFProducthasStockService>();
             services.AddScoped<IEFProductService, EFProductService>();
             services.AddScoped<IEFBasketService, EFBasketService>();
             services.AddScoped<IEFUserAddressService, EFUserAddressService>();
             services.AddScoped<IEFOrderService, EFOrderService>();
+            services.AddScoped<IEFProducthasColorAndSizeService, EFProducthasColorAndSizeService>();
+            services.AddScoped<IEFProducthasSizeService, EFProducthasSizeService>();
+            services.AddScoped<IEFProducthasStockService, EFProducthasStockService>();
 
 
 

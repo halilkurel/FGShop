@@ -1,6 +1,5 @@
-﻿using FGShop.DtoLayer.ProducthasStockDtos;
-using FGShop.DtoLayer.SizeDtos;
-using FGShop.DtoLayer.StockDtos;
+﻿using FGShop.DataAccessLayer.Context;
+using FGShop.DtoLayer.EFProducthasColorAndSizeAndStockDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace FGShop.BussinessLayer.EntityFremawork.EFProducthasStock
 {
     public interface IEFProducthasStockService
     {
-        Task<List<ResultStockDto>> GetByProductIdStock(int id);
-        Task<ResultProducthasStockDto> GetByProductIdProducthasStockList(int id);
+        Task<int> GetByProductId(int productId);
+        Task<List<ResultEFProducthasColorAndSizeDto>> GetByProductIdAndColorSizeStock(int productId);
     }
 }

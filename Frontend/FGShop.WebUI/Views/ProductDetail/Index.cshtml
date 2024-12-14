@@ -121,4 +121,14 @@
 
 
 <!-- Related Products -->
-@* @await Component.InvokeAsync("_ProductDetailRelatedProductsComponentPartial", new { productId = ViewBag.ProductId }) *@ bu sayfada sepete veri eklemek için ne yapmalıyım
+@*  @await Component.InvokeAsync("_ProductDetailRelatedProductsComponentPartial", new { productId = ViewBag.ProductId })  *@
+
+
+
+
+<!-- Bu script fotoraflar arasında gezerken ürünü basket'e ekliyordu onu engellemek için davranışı engellenmiştir-->
+<script>
+	$(document).on('click', '.prev-slick3, .next-slick3', function (e) {
+		e.preventDefault();
+	});
+</script>

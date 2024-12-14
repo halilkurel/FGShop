@@ -12,6 +12,7 @@ namespace FGShop.EntityLayer.Entities
         public int ColorId { get; set; }
         public Color Color { get; set; }
         public Product Product { get; set; }
+		public ICollection<ProducthasColorAndSize> producthasColorAndSize { get; set; }
 
-    }
+	}
 }

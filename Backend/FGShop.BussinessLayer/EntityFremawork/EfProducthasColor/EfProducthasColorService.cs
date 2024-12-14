@@ -48,11 +48,17 @@ namespace FGShop.BussinessLayer.EntityFremawork.EfProducthasColor
 
         public async Task<List<ResultProducthasColorDto>> GetByProductIdProducthasColorList(int id)
         {
-            var producthasColorList = await _context.Set<ProducthasColor>()
-                                                    .Where(x => x.ProductId == id)
-                                                    .ToListAsync();
-            var list = _mapper.Map<List<ResultProducthasColorDto>>(producthasColorList);
-            return list;
+            var producthasColorList = await _context.ProducthasColors.Where(x => x.ProductId == id)
+                                                            .Include(x => x.Color)
+                                                            .ToListAsync();
+            var data = producthasColorList.Select(x => new ResultProducthasColorDto
+            {
+                ColorId = x.ColorId,
+                ProductId = x.ProductId,
+                Id = x.Id,
+                ColorName= x.Color.ColorName
+            }).ToList();
+            return data;
         }
     }
 }

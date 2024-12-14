@@ -65,7 +65,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
                     var response = await httpClient.PostAsync("https://localhost:7171/api/ProducthasCategories", content);
                 }
 
-                return Json(new { success = true, redirectUrl = Url.Action("CreateProducthasSize", "ProducthasSize", new { area = "Admin", id = model.ProductId }) });
+                return Json(new { success = true, redirectUrl = Url.Action("CreateProducthasColor", "ProducthasColor", new { area = "Admin", id = model.ProductId }) });
 
             }
             return View(); // Hatalı durumlarda view geri dön

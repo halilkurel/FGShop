@@ -2,7 +2,6 @@
 using FGShop.DtoLayer.ColorDtos;
 using FGShop.DtoLayer.EFProductDtos;
 using FGShop.DtoLayer.SizeDtos;
-using FGShop.DtoLayer.StockDtos;
 using FGShop.EntityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,15 +21,26 @@ namespace FGShop.BussinessLayer.EntityFremawork.EFProduct
 			_context = context;
 		}
 
+		//Bu metotta ürünün rengine ait olan bedenleri listeleyeceğiz
+		public async Task<List<ResultSizeDto>> GetByProductandColorIdResultAll(int productId, int colorId)
+		{
+			var data = await _context.producthasColorAndSizes
+				.Where(x => x.ProducthasColor.ProductId == productId && x.ProducthasColor.ColorId == colorId)
+				.Select( g => new ResultSizeDto
+				{
+					Id = g.SizeId,
+					SizeName= g.Size.SizeName
+				})
+				.ToListAsync();
+			return data;
+				
+		}
+
 		public async Task<ResultEFProductDto> GetByProductIdResultAll(int id)
 		{
 			var product = await _context.Products
 				.Include(p => p.ProducthasColors) // Ara tabloyu dahil ediyoruz
-					.ThenInclude(pc => pc.Color)  // Renk bilgilerini alıyoruz
-				.Include(p => p.producthasSizes)  // Ara tabloyu dahil ediyoruz
-					.ThenInclude(ps => ps.Size)   // Boyut bilgilerini alıyoruz
-				.Include(p => p.ProducthasStocks) // Ara tabloyu dahil ediyoruz
-					.ThenInclude(ps => ps.Stock)  // Stok bilgilerini alıyoruz
+					.ThenInclude(pc => pc.Color)  // Renk bilgilerini alıyoruz   // Boyut bilgilerini alıyoruz 
 				.FirstOrDefaultAsync(p => p.Id == id);
 
 			if (product == null)
@@ -49,18 +59,9 @@ namespace FGShop.BussinessLayer.EntityFremawork.EFProduct
 				Colors = product.ProducthasColors.Select(pc => new ResultColorDto
 				{
 					Id = pc.Color.Id,   // Ara tablo üzerinden Color entity'sine ulaşıyoruz
-					ColorName = pc.Color.ColorName
+					ColorName = pc.Color.ColorName,
+
 				}).ToList(),
-				Sizes = product.producthasSizes.Select(ps => new ResultSizeDto
-				{
-					Id = ps.Size.Id,      // Ara tablo üzerinden Size entity'sine ulaşıyoruz
-					SizeName = ps.Size.SizeName
-				}).ToList(),
-				Stocks = product.ProducthasStocks.Select(ps => new ResultStockDto
-				{
-					Id = ps.Stock.Id,     // Ara tablo üzerinden Stock entity'sine ulaşıyoruz
-					StockQuantity = ps.Stock.StockQuantity
-				}).FirstOrDefault() // Stock Çoka çok tabloda olsada tek bir veri olarak geleceği için FirstorDefault kullandık
 			};
 		}
 

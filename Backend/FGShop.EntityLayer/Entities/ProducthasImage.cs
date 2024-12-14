@@ -10,6 +10,7 @@ namespace FGShop.EntityLayer.Entities
     {
         public int ProductId { get; set; }
         public int ImageId { get; set; }
+        
 
     }
 }

@@ -9,14 +9,13 @@ using FGShop.DtoLayer.ImageDtos;
 using FGShop.DtoLayer.OrderDtos;
 using FGShop.DtoLayer.ProductDtos;
 using FGShop.DtoLayer.ProducthasCategoryDtos;
+using FGShop.DtoLayer.ProducthasColorAndProducthasSizeDtos;
+using FGShop.DtoLayer.ProducthasColorAndSizehasStockDtos;
 using FGShop.DtoLayer.ProducthasColorDtos;
 using FGShop.DtoLayer.ProducthasImageDto;
-using FGShop.DtoLayer.ProducthasStockDtos;
-using FGShop.DtoLayer.ProucthasSizeDtos;
 using FGShop.DtoLayer.SizeDtos;
 using FGShop.DtoLayer.SliderDtos;
 using FGShop.DtoLayer.StatusDtos;
-using FGShop.DtoLayer.StockDtos;
 using FGShop.DtoLayer.UserAddressDtos;
 using FGShop.EntityLayer.Entities;
 
@@ -27,17 +26,7 @@ namespace FGShop.BussinessLayer.Mappings.AutoMapper
     {
         public FGShopProfile()
         {
-            CreateMap<Stock, ResultStockDto>().ReverseMap();
-            CreateMap<Stock, CreateStockDto>().ReverseMap();
-            CreateMap<Stock, UpdateStockDto>().ReverseMap();
-            CreateMap<Stock, GetByStockIdDto>().ReverseMap();
-            CreateMap<UpdateStockDto, ResultStockDto>().ReverseMap();
 
-            CreateMap<ProducthasStock, ResultProducthasStockDto>().ReverseMap();
-            CreateMap<ProducthasStock, CreateProducthasStockDto>().ReverseMap();
-            CreateMap<ProducthasStock, UpdateProducthasStockDto>().ReverseMap();
-            CreateMap<ProducthasStock, GetByProducthasStockIdDto>().ReverseMap();
-            CreateMap<UpdateProducthasStockDto, ResultProducthasStockDto>().ReverseMap();
 
             CreateMap<Product,ResultProductDto>().ReverseMap();
             CreateMap<Product,CreateProductDto>().ReverseMap();
@@ -110,13 +99,6 @@ namespace FGShop.BussinessLayer.Mappings.AutoMapper
             CreateMap<UpdateSizeDto, ResultSizeDto>().ReverseMap();
 
 
-            CreateMap<ProducthasSize, ResultProducthasSizeDto>().ReverseMap();
-            CreateMap<ProducthasSize, CreateProducthasSizeDto>().ReverseMap();
-            CreateMap<ProducthasSize, UpdateProducthasSizeDto>().ReverseMap();
-            CreateMap<ProducthasSize, GetByProducthasSizeIdDto>().ReverseMap();
-            CreateMap<UpdateProducthasSizeDto, ResultProducthasSizeDto>().ReverseMap();
-
-
 
 			CreateMap<ApplicationUser, UserRegisterDto>().ReverseMap();
 			CreateMap<ApplicationUser, UserLoginDto>().ReverseMap();
@@ -144,6 +126,18 @@ namespace FGShop.BussinessLayer.Mappings.AutoMapper
             CreateMap<Order, CreateOrderDto>().ReverseMap();
             CreateMap<Order, UpdateOrderDto>().ReverseMap();
             CreateMap<ResultOrderDto, UpdateOrderDto>().ReverseMap();
-        }
+
+
+			CreateMap<ProducthasColorAndSize, CreateProducthasColorAndSizeDto>().ReverseMap();
+			CreateMap<ProducthasColorAndSize, UpdateProducthasColorAndSizeDto>().ReverseMap();
+			CreateMap<ProducthasColorAndSize, ResultProducthasColorAndSizeDto>().ReverseMap();
+			CreateMap<ProducthasColorAndSize, GetByProducthasColorAndSizeIdDto>().ReverseMap();
+			CreateMap<ResultProducthasColorAndSizeDto, UpdateProducthasColorAndSizeDto>().ReverseMap();
+
+            CreateMap<ProducthasColorAndSizehasStock, CreateProducthasColorAndSizehasStockDto>().ReverseMap();
+            CreateMap<ProducthasColorAndSizehasStock, UpdateProducthasColorAndSizehasStockDto>().ReverseMap();
+            CreateMap<ProducthasColorAndSizehasStock, ResultProducthasColorAndSizehasStockDto>().ReverseMap();
+            CreateMap<ProducthasColorAndSizehasStock, GetByProducthasColorAndSizehasStockIdDto>().ReverseMap();
+		}
     }
 }

@@ -15,15 +15,27 @@ namespace FGShop.DtoLayer.EFOrderDtos
 {
     public class ResultJoinOrderDto
     {
-        public GetByOrderIdDto? GetByOrderId { get; set; }
-        public GetByProductIdDto? GetByProductId { get; set; }
-        public UserListDto? UserList { get; set; }
-        public ResultUserAddressDto? ResultUserAddress { get; set; }
-        public GetBySizeIdDto? GetBySizeId { get; set; }
-        public GetByColorIdDto? GetByColorId { get; set; }
-        public ResultStatusDto? ResultStatus { get; set; }
+		public int Id { get; set; }
+		public string? UserName { get; set; }
+		public string? ProductName { get; set; }
+		public int? OrderQuantity { get; set; }
+		public string? SizeName { get; set; }
+		public string? ColorName { get; set; }
+		public int? StatusId { get; set; }
+		public string? StatusName { get; set; }
+		public DateTime? OrderDate { get; set; }
+
+
+		//Adress bilgileri
+		public string? Email { get; set; }
+		public string? PhoneNumber { get; set; }
+		public string? Country { get; set; }
+		public string? City { get; set; }
+		public string? District { get; set; }
+		public string? Neighbourhood { get; set; }
+		public string? Address { get; set; }
 
 
 
-    }
+	}
 }

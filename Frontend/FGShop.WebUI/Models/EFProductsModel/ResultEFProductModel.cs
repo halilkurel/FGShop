@@ -14,8 +14,8 @@ namespace FGShop.WebUI.Models.EFProductsModel
 		public string? Description2 { get; set; }
 
 
-		public List<SizeResult>? Sizes { get; set; }
+		//public List<SizeResult>? Sizes { get; set; }
 		public List<ColorResult>? Colors { get; set; }
-		public ResultStock? Stocks { get; set; }
+		//public ResultStock? Stocks { get; set; }
 	}
 }

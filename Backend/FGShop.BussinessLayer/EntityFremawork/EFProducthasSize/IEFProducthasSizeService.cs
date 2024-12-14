@@ -1,5 +1,5 @@
-﻿using FGShop.DtoLayer.ImageDtos;
-using FGShop.DtoLayer.ProucthasSizeDtos;
+﻿using FGShop.DtoLayer.EFProducthasColorAndSizeDto;
+using FGShop.DtoLayer.ProducthasColorAndProducthasSizeDtos;
 using FGShop.DtoLayer.SizeDtos;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,6 @@ namespace FGShop.BussinessLayer.EntityFremawork.EFProducthasSize
 {
     public interface IEFProducthasSizeService
     {
-        Task<List<ResultSizeDto>> GetByProductIdSize(int id);
-        Task<List<ResultProducthasSizeDto>> GetByProductIdSProducthasSizeList(int id);
+        Task<List<ResultSizeDto>> GetByProductId(int productId);
     }
 }

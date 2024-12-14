@@ -15,26 +15,10 @@
 			@Model.Description
 		</p>
 
+		<input type="hidden" name="productId" value="@Model.ProductId" />
 		<!--  -->
 		<div class="p-t-33">
-			<div class="flex-w flex-r-m p-b-10">
-				<div class="size-203 flex-c-m respon6">
-					Beden
-				</div>
-
-				<div class="size-204 respon6-next">
-					<div class="rs1-select2 bor8 bg0">
-						<select class="js-select2" name="sizeId">
-							@foreach (var size in Model.Sizes)
-							{
-								<option value="@size.Id">@size.SizeName</option>
-
-							}
-						</select>
-						<div class="dropDownSelect2"></div>
-					</div>
-				</div>
-			</div>
+			
 
 			<div class="flex-w flex-r-m p-b-10">
 				<div class="size-203 flex-c-m respon6">
@@ -43,7 +27,7 @@
 
 				<div class="size-204 respon6-next">
 					<div class="rs1-select2 bor8 bg0">
-						<select class="js-select2" name="colorId">
+						<select class="js-select2" name="colorId" id="colorId">
 							@foreach (var color in Model.Colors)
 							{
 								<option value="@color.Id">@color.ColorName</option>
@@ -53,6 +37,22 @@
 					</div>
 				</div>
 			</div>
+
+
+			<div class="flex-w flex-r-m p-b-10">
+				<div class="size-203 flex-c-m respon6">
+					Beden
+				</div>
+				<div class="size-204 respon6-next">
+					<div class="rs1-select2 bor8 bg0">
+						<select class="js-select2" name="sizeId" id="sizeId">
+							<option value="">Lütfen önce bir renk seçiniz</option>
+						</select>
+						<div class="dropDownSelect2"></div>
+					</div>
+				</div>
+			</div>
+
 
 			<div class="flex-w flex-r-m p-b-10">
 				<div class="size-204 flex-w flex-m respon6-next">
@@ -100,6 +100,41 @@
 
 
 <script>
+
+	$(document).ready(function () {
+        $('#colorId').on('change', function () {
+            var colorId = $(this).val();
+            var productId = $('input[name="productId"]').val();
+
+            // Eğer renk seçilmemişse boş bırak
+            if (!colorId) {
+                $('#sizeId').html('<option value="">Lütfen bir renk seçiniz</option>');
+                return;
+            }
+
+            // API çağrısı
+            $.ajax({
+                type: 'GET',
+                url: `https://localhost:7171/api/EFProducts/GetByProductandColorIdResultAll/${productId}/${colorId}`,
+                success: function (response) {
+                    if (response && response.length > 0) {
+                        // Gelen verilerle boyutları doldur
+                        var options = '';
+                        response.forEach(function (item) {
+                            options += `<option value="${item.id}">${item.sizeName}</option>`;
+                        });
+                        $('#sizeId').html(options);
+                    } else {
+                        $('#sizeId').html('<option value="">Bu renk için beden bulunamadı</option>');
+                    }
+                },
+                error: function () {
+                    $('#sizeId').html('<option value="">Boyutlar yüklenirken bir hata oluştu</option>');
+                }
+            });
+        });
+    });
+
 	$(document).ready(function () {
 		$('#product-form').on('submit', function (e) {
 			e.preventDefault(); // Formun varsayılan davranışını engelle

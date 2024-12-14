@@ -22,9 +22,10 @@ namespace FGShop.WebUI.Areas.Admin.ViewComponents
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                var list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ResultStock>>(jsonString);
+                var stock = Newtonsoft.Json.JsonConvert.DeserializeObject<int>(jsonString);
+                ViewBag.Stock = stock;
 
-                return View(list);
+                return View();
             }
             else
             {

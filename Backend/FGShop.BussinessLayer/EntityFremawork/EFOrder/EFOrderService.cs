@@ -27,454 +27,182 @@ namespace FGShop.BussinessLayer.EntityFremawork.EFOrder
 
         public async Task<ResultJoinOrderDto> GetByOrderId(int orderId)
         {
-            var data = await _context.Orders.Where(x => x.Id == orderId)
-                .Include(x => x.User)
-                .Include(x => x.UserAddress)
-                .Include(x => x.Color)
-                .Include(x => x.Size)
-                .Include(x => x.Product)
-                .Include(x => x.Stasus)
-                .ToListAsync();
+            var data = _context.Orders
+                .Where(x => x.Id == orderId)
+                .Select( g => new ResultJoinOrderDto
+                {
+                    Id = g.Id,
+                    Address = g.Address,
+                    City = g.City,
+                    ColorName = g.ColorName,
+                    Country = g.Country,
+                    District = g.District,
+                    Email = g.Email,
+                    Neighbourhood = g.Neighbourhood,
+                    OrderDate = g.OrderDate,
+                    OrderQuantity = g.OrderQuantity,
+                    PhoneNumber = g.PhoneNumber,
+                    ProductName = g.ProductName,
+                    SizeName = g.SizeName,
+                    UserName = g.UserName,
+                    StatusId = g.StatusId,
+                    StatusName = g.Status.StatusName
+                    
+                })
+                .FirstOrDefault();
 
-            var result = data.Select(x => new ResultJoinOrderDto
-            {
-                GetByOrderId = new GetByOrderIdDto
-                {
-                    Id = x.Id,
-                    OrderDate = x.OrderDate,
-                    SizeId = x.SizeId,
-                    OrderQuantity = x.OrderQuantity,
-                    ColorId = x.ColorId,
-                    StatusId = x.StatusId,
-                    UserAddressId = x.UserAddressId,
-                    UserId = x.UserId
-                },
-                GetByProductId = x.Product != null ? new GetByProductIdDto
-                {
-                    CoverPhoto = x.Product.CoverPhoto,
-                    Description = x.Product.Description,
-                    Description2 = x.Product.Description2,
-                    Id = x.Product.Id,
-                    Price = x.Product.Price,
-                    ProductName = x.Product.ProductName
-                } : null,
-                UserList = x.User != null ? new UserListDto
-                {
-                    Id = x.User.Id,
-                    Email = x.User.Email,
-                    Name = x.User.Name,
-                    PhoneNumber = x.User.PhoneNumber,
-                    Surname = x.User.Surname,
-                    Username = x.User.UserName
-
-                } : null,
-                ResultUserAddress = x.UserAddress != null ? new ResultUserAddressDto
-                {
-                    Id = x.UserAddress.Id,
-                    Email = x.UserAddress.Email,
-                    PhoneNumber = x.UserAddress.PhoneNumber,
-                    Address = x.UserAddress.Address,
-                    City = x.UserAddress.City,
-                    Country = x.UserAddress.Country,
-                    District = x.UserAddress.District,
-                    Neighbourhood = x.UserAddress.Neighbourhood,
-                    UserId = x.UserAddress.UserId
-                } : null,
-                GetBySizeId = x.Size != null ? new GetBySizeIdDto
-                {
-                    Id = x.Size.Id,
-                    SizeName = x.Size.SizeName
-                } : null,
-                GetByColorId = x.Color != null ? new GetByColorIdDto
-                {
-                    Id = x.Color.Id,
-                    ColorName = x.Color.ColorName
-                } : null,
-                ResultStatus = new ResultStatusDto
-                {
-                    Id = x.StatusId,
-                    StatusName = x.Stasus.StatusName
-                }
-            }).FirstOrDefault();
-
-            return result;
+            return data;
         }
 
         public async Task<List<ResultJoinOrderDto>> ListApprovedOrders()
         {
-            var data = await _context.Orders.Where(x => x.StatusId == 5)
-                .Include(x => x.User)
-                .Include(x => x.UserAddress)
-                .Include(x => x.Color)
-                .Include(x => x.Size)
-                .Include(x => x.Product)
-                .Include(x => x.Stasus)
-                .ToListAsync();
+            var data = await _context.Orders
+                .Where(x => x.StatusId == 5)
+				.Select(g => new ResultJoinOrderDto
+				{
+					Id = g.Id,
+					Address = g.Address,
+					City = g.City,
+					ColorName = g.ColorName,
+					Country = g.Country,
+					District = g.District,
+					Email = g.Email,
+					Neighbourhood = g.Neighbourhood,
+					OrderDate = g.OrderDate,
+					OrderQuantity = g.OrderQuantity,
+					PhoneNumber = g.PhoneNumber,
+					ProductName = g.ProductName,
+					SizeName = g.SizeName,
+					UserName = g.UserName,
+					StatusId = g.StatusId,
+					StatusName = g.Status.StatusName
 
-            var result = data.Select(x => new ResultJoinOrderDto
-            {
-                GetByOrderId = new GetByOrderIdDto
-                {
-                    Id = x.Id,
-                    OrderDate = x.OrderDate,
-                    SizeId = x.SizeId,
-                    OrderQuantity = x.OrderQuantity,
-                    ColorId = x.ColorId,
-                    StatusId = x.StatusId,
-                    UserAddressId = x.UserAddressId,
-                    UserId = x.UserId
-                },
-                GetByProductId = x.Product != null ? new GetByProductIdDto
-                {
-                    CoverPhoto = x.Product.CoverPhoto,
-                    Description = x.Product.Description,
-                    Description2 = x.Product.Description2,
-                    Id = x.Product.Id,
-                    Price = x.Product.Price,
-                    ProductName = x.Product.ProductName
-                } : null,
-                UserList = x.User != null ? new UserListDto
-                {
-                    Id = x.User.Id,
-                    Email = x.User.Email,
-                    Name = x.User.Name,
-                    PhoneNumber = x.User.PhoneNumber,
-                    Surname = x.User.Surname,
-                    Username = x.User.UserName
+				})
+				.ToListAsync();
 
-                } : null,
-                ResultUserAddress = x.UserAddress != null ? new ResultUserAddressDto
-                {
-                    Id = x.UserAddress.Id,
-                    Email = x.UserAddress.Email,
-                    PhoneNumber = x.UserAddress.PhoneNumber,
-                    Address = x.UserAddress.Address,
-                    City = x.UserAddress.City,
-                    Country = x.UserAddress.Country,
-                    District = x.UserAddress.District,
-                    Neighbourhood = x.UserAddress.Neighbourhood,
-                    UserId = x.UserAddress.UserId
-                } : null,
-                GetBySizeId = x.Size != null ? new GetBySizeIdDto
-                {
-                    Id = x.Size.Id,
-                    SizeName = x.Size.SizeName
-                } : null,
-                GetByColorId = x.Color != null ? new GetByColorIdDto
-                {
-                    Id = x.Color.Id,
-                    ColorName = x.Color.ColorName
-                } : null,
-                ResultStatus = new ResultStatusDto
-                {
-                    Id = x.StatusId,
-                    StatusName = x.Stasus.StatusName
-                }
-            }).ToList();
 
-            return result;
+			return data;
         }
 
         public async Task<List<ResultJoinOrderDto>> ListCancelledOrders()
         {
-            var data = await _context.Orders.Where(x => x.StatusId == 7)
-                .Include(x => x.User)
-                .Include(x => x.UserAddress)
-                .Include(x => x.Color)
-                .Include(x => x.Size)
-                .Include(x => x.Product)
-                .Include(x => x.Stasus)
-                .ToListAsync();
+			var data = await _context.Orders
+				.Where(x => x.StatusId == 7)
+				.Select(g => new ResultJoinOrderDto
+				{
+					Id = g.Id,
+					Address = g.Address,
+					City = g.City,
+					ColorName = g.ColorName,
+					Country = g.Country,
+					District = g.District,
+					Email = g.Email,
+					Neighbourhood = g.Neighbourhood,
+					OrderDate = g.OrderDate,
+					OrderQuantity = g.OrderQuantity,
+					PhoneNumber = g.PhoneNumber,
+					ProductName = g.ProductName,
+					SizeName = g.SizeName,
+					UserName = g.UserName,
+					StatusId = g.StatusId,
+					StatusName = g.Status.StatusName
 
-            var result = data.Select(x => new ResultJoinOrderDto
-            {
-                GetByOrderId = new GetByOrderIdDto
-                {
-                    Id = x.Id,
-                    OrderDate = x.OrderDate,
-                    SizeId = x.SizeId,
-                    OrderQuantity = x.OrderQuantity,
-                    ColorId = x.ColorId,
-                    StatusId = x.StatusId,
-                    UserAddressId = x.UserAddressId,
-                    UserId = x.UserId
-                },
-                GetByProductId = x.Product != null ? new GetByProductIdDto
-                {
-                    CoverPhoto = x.Product.CoverPhoto,
-                    Description = x.Product.Description,
-                    Description2 = x.Product.Description2,
-                    Id = x.Product.Id,
-                    Price = x.Product.Price,
-                    ProductName = x.Product.ProductName
-                } : null,
-                UserList = x.User != null ? new UserListDto
-                {
-                    Id = x.User.Id,
-                    Email = x.User.Email,
-                    Name = x.User.Name,
-                    PhoneNumber = x.User.PhoneNumber,
-                    Surname = x.User.Surname,
-                    Username = x.User.UserName
+				})
+				.ToListAsync();
 
-                } : null,
-                ResultUserAddress = x.UserAddress != null ? new ResultUserAddressDto
-                {
-                    Id = x.UserAddress.Id,
-                    Email = x.UserAddress.Email,
-                    PhoneNumber = x.UserAddress.PhoneNumber,
-                    Address = x.UserAddress.Address,
-                    City = x.UserAddress.City,
-                    Country = x.UserAddress.Country,
-                    District = x.UserAddress.District,
-                    Neighbourhood = x.UserAddress.Neighbourhood,
-                    UserId = x.UserAddress.UserId
-                } : null,
-                GetBySizeId = x.Size != null ? new GetBySizeIdDto
-                {
-                    Id = x.Size.Id,
-                    SizeName = x.Size.SizeName
-                } : null,
-                GetByColorId = x.Color != null ? new GetByColorIdDto
-                {
-                    Id = x.Color.Id,
-                    ColorName = x.Color.ColorName
-                } : null,
-                ResultStatus = new ResultStatusDto
-                {
-                    Id = x.StatusId,
-                    StatusName = x.Stasus.StatusName
-                }
-            }).ToList();
 
-            return result;
-        }
+			return data;
+		}
 
         public async Task<List<ResultJoinOrderDto>> ListOrderCompleted()
         {
-            var data = await _context.Orders.Where(x => x.StatusId == 6)
-                .Include(x => x.User)
-                .Include(x => x.UserAddress)
-                .Include(x => x.Color)
-                .Include(x => x.Size)
-                .Include(x => x.Product)
-                .Include(x => x.Stasus)
-                .ToListAsync();
+			var data = await _context.Orders
+				.Where(x => x.StatusId == 6)
+				.Select(g => new ResultJoinOrderDto
+				{
+					Id = g.Id,
+					Address = g.Address,
+					City = g.City,
+					ColorName = g.ColorName,
+					Country = g.Country,
+					District = g.District,
+					Email = g.Email,
+					Neighbourhood = g.Neighbourhood,
+					OrderDate = g.OrderDate,
+					OrderQuantity = g.OrderQuantity,
+					PhoneNumber = g.PhoneNumber,
+					ProductName = g.ProductName,
+					SizeName = g.SizeName,
+					UserName = g.UserName,
+					StatusId = g.StatusId,
+					StatusName = g.Status.StatusName
 
-            var result = data.Select(x => new ResultJoinOrderDto
-            {
-                GetByOrderId = new GetByOrderIdDto
-                {
-                    Id = x.Id,
-                    OrderDate = x.OrderDate,
-                    SizeId = x.SizeId,
-                    OrderQuantity = x.OrderQuantity,
-                    ColorId = x.ColorId,
-                    StatusId = x.StatusId,
-                    UserAddressId = x.UserAddressId,
-                    UserId = x.UserId
-                },
-                GetByProductId = x.Product != null ? new GetByProductIdDto
-                {
-                    CoverPhoto = x.Product.CoverPhoto,
-                    Description = x.Product.Description,
-                    Description2 = x.Product.Description2,
-                    Id = x.Product.Id,
-                    Price = x.Product.Price,
-                    ProductName = x.Product.ProductName
-                } : null,
-                UserList = x.User != null ? new UserListDto
-                {
-                    Id = x.User.Id,
-                    Email = x.User.Email,
-                    Name = x.User.Name,
-                    PhoneNumber = x.User.PhoneNumber,
-                    Surname = x.User.Surname,
-                    Username = x.User.UserName
+				})
+				.ToListAsync();
 
-                } : null,
-                ResultUserAddress = x.UserAddress != null ? new ResultUserAddressDto
-                {
-                    Id = x.UserAddress.Id,
-                    Email = x.UserAddress.Email,
-                    PhoneNumber = x.UserAddress.PhoneNumber,
-                    Address = x.UserAddress.Address,
-                    City = x.UserAddress.City,
-                    Country = x.UserAddress.Country,
-                    District = x.UserAddress.District,
-                    Neighbourhood = x.UserAddress.Neighbourhood,
-                    UserId = x.UserAddress.UserId
-                } : null,
-                GetBySizeId = x.Size != null ? new GetBySizeIdDto
-                {
-                    Id = x.Size.Id,
-                    SizeName = x.Size.SizeName
-                } : null,
-                GetByColorId = x.Color != null ? new GetByColorIdDto
-                {
-                    Id = x.Color.Id,
-                    ColorName = x.Color.ColorName
-                } : null,
-                ResultStatus = new ResultStatusDto
-                {
-                    Id = x.StatusId,
-                    StatusName = x.Stasus.StatusName
-                }
-            }).ToList();
 
-            return result;
-        }
+			return data;
+		}
 
         
         public async Task<List<ResultJoinOrderDto>> ListUnapprovedOrders()
         {
-            var data = await _context.Orders.Where(x => x.StatusId == 4)
-                .Include(x => x.User)
-                .Include(x => x.UserAddress)
-                .Include(x => x.Color)
-                .Include(x => x.Size)
-                .Include(x => x.Product)
-                .Include(x => x.Stasus)
-                .ToListAsync();
+			var data = await _context.Orders
+				.Where(x => x.StatusId == 4)
+				.Select(g => new ResultJoinOrderDto
+				{
+					Id = g.Id,
+					Address = g.Address,
+					City = g.City,
+					ColorName = g.ColorName,
+					Country = g.Country,
+					District = g.District,
+					Email = g.Email,
+					Neighbourhood = g.Neighbourhood,
+					OrderDate = g.OrderDate,
+					OrderQuantity = g.OrderQuantity,
+					PhoneNumber = g.PhoneNumber,
+					ProductName = g.ProductName,
+					SizeName = g.SizeName,
+					UserName = g.UserName,
+					StatusId = g.StatusId,
+					StatusName = g.Status.StatusName
 
-            var result = data.Select(x => new ResultJoinOrderDto
-            {
-                GetByOrderId = new GetByOrderIdDto
-                {
-                    Id = x.Id,
-                    OrderDate = x.OrderDate,
-                    SizeId = x.SizeId,
-                    OrderQuantity = x.OrderQuantity,
-                    ColorId = x.ColorId,
-                    StatusId = x.StatusId,
-                    UserAddressId = x.UserAddressId,
-                    UserId = x.UserId
-                },
-                GetByProductId = x.Product != null ? new GetByProductIdDto
-                {
-                    CoverPhoto = x.Product.CoverPhoto,
-                    Description = x.Product.Description,
-                    Description2 = x.Product.Description2,
-                    Id = x.Product.Id,
-                    Price = x.Product.Price,
-                    ProductName = x.Product.ProductName
-                } : null,
-                UserList = x.User != null ? new UserListDto
-                {
-                    Id = x.User.Id,
-                    Email = x.User.Email,
-                    Name = x.User.Name,
-                    PhoneNumber = x.User.PhoneNumber,
-                    Surname = x.User.Surname,
-                    Username = x.User.UserName
+				})
+				.ToListAsync();
 
-                } : null,
-                ResultUserAddress = x.UserAddress != null ? new ResultUserAddressDto
-                {
-                    Id = x.UserAddress.Id,
-                    Email = x.UserAddress.Email,
-                    PhoneNumber = x.UserAddress.PhoneNumber,
-                    Address = x.UserAddress.Address,
-                    City = x.UserAddress.City,
-                    Country = x.UserAddress.Country,
-                    District = x.UserAddress.District,
-                    Neighbourhood = x.UserAddress.Neighbourhood,
-                    UserId = x.UserAddress.UserId
-                } : null,
-                GetBySizeId = x.Size != null ? new GetBySizeIdDto
-                {
-                    Id = x.Size.Id,
-                    SizeName = x.Size.SizeName
-                } : null,
-                GetByColorId = x.Color != null ? new GetByColorIdDto
-                {
-                    Id = x.Color.Id,
-                    ColorName = x.Color.ColorName
-                } : null,
-                ResultStatus = new ResultStatusDto
-                {
-                    Id = x.StatusId,
-                    StatusName = x.Stasus.StatusName
-                }
-            }).ToList();
 
-            return result;
-        }
+			return data;
+		}
 
         public async Task<List<ResultJoinOrderDto>> OrderList()
         {
-            var data = await _context.Orders
-                .Include(x => x.User)
-                .Include(x => x.UserAddress)
-                .Include(x => x.Color)
-                .Include(x => x.Size)
-                .Include(x => x.Product)
-                .Include(x => x.Stasus)
-                .ToListAsync();
+			var data = await _context.Orders
+				.Select(g => new ResultJoinOrderDto
+				{
+					Id = g.Id,
+					Address = g.Address,
+					City = g.City,
+					ColorName = g.ColorName,
+					Country = g.Country,
+					District = g.District,
+					Email = g.Email,
+					Neighbourhood = g.Neighbourhood,
+					OrderDate = g.OrderDate,
+					OrderQuantity = g.OrderQuantity,
+					PhoneNumber = g.PhoneNumber,
+					ProductName = g.ProductName,
+					SizeName = g.SizeName,
+					UserName = g.UserName,
+					StatusId = g.StatusId,
+					StatusName = g.Status.StatusName
 
-            var result = data.Select(x => new ResultJoinOrderDto
-            {
-                GetByOrderId = new GetByOrderIdDto
-                {
-                    Id = x.Id,
-                    OrderDate = x.OrderDate,
-                    SizeId = x.SizeId,
-                    OrderQuantity = x.OrderQuantity,
-                    ColorId = x.ColorId,
-                    StatusId = x.StatusId,
-                    UserAddressId = x.UserAddressId,
-                    UserId = x.UserId
-                },
-                GetByProductId = x.Product != null ? new GetByProductIdDto
-                {
-                    CoverPhoto = x.Product.CoverPhoto,
-                    Description = x.Product.Description,
-                    Description2 = x.Product.Description2,
-                    Id = x.Product.Id,
-                    Price = x.Product.Price,
-                    ProductName = x.Product.ProductName
-                } : null,
-                UserList = x.User != null ? new UserListDto
-                {
-                    Id= x.User.Id,
-                    Email = x.User.Email,
-                    Name = x.User.Name,
-                    PhoneNumber = x.User.PhoneNumber,
-                    Surname = x.User.Surname,
-                    Username = x.User.UserName
+				})
+				.ToListAsync();
 
-                } : null,
-                ResultUserAddress = x.UserAddress != null ? new ResultUserAddressDto
-                {
-                    Id = x.UserAddress.Id,
-                    Email = x.UserAddress.Email,
-                    PhoneNumber= x.UserAddress.PhoneNumber,
-                    Address = x.UserAddress.Address,
-                    City = x.UserAddress.City,
-                    Country = x.UserAddress.Country,
-                    District = x.UserAddress.District,
-                    Neighbourhood = x.UserAddress.Neighbourhood,
-                    UserId = x.UserAddress.UserId
-                } : null,
-                GetBySizeId = x.Size != null ? new GetBySizeIdDto
-                {
-                    Id = x.Size.Id,
-                    SizeName = x.Size.SizeName
-                } : null,
-                GetByColorId = x.Color != null ? new GetByColorIdDto
-                {
-                    Id = x.Color.Id,
-                    ColorName = x.Color.ColorName
-                } : null,
-                ResultStatus = new ResultStatusDto
-                {
-                    Id = x.StatusId,
-                    StatusName = x.Stasus.StatusName
-                }
-            }).ToList();
 
-            return result;
-        }
+			return data;
+		}
 
     }
 }

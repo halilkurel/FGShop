@@ -8,8 +8,8 @@ namespace FGShop.EntityLayer.Entities
 {
     public class Image: BaseEntity
     {
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         // Navigation property
-        public ICollection<ProducthasImage> producthasImages { get; set; }
+        public ICollection<ProducthasImage>? producthasImages { get; set; }
     }
 }

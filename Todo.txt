@@ -1,2 +1,17 @@
--Frontend kýsmýnda WebUI kýsmý parçalara ayrýlarak düzenlenecek.
-- Daha sonra backend kýsmýna gçilip entity katmanýna parçalý sayfalara göre entity yazýlacak
+-Frontend kýsmýnda WebUI kýsmý parçalara ayrýlarak düzenlenecek.		TAMAMLANDI
+- Daha sonra backend kýsmýna gçilip entity katmanýna parçalý sayfalara göre entity yazýlacak	TAMAMLANDI
+
+01.12.24
+- UI Katmanýnda Modal kýsmýna çözüm bulunacak.		//Çözüm bulunamadý . Modal kaldýrýldý. Direk ürünün sayfasýna yönlendiriliyor.
+- Stock bilgisi color ve size e göre yapýlacak			//Tamamlandý
+13.12.24
+- Order tablosu baðýmsýz olacak çünkü ürün silindiðinde order verisi silinmesin.
+- UI katmanýnda kullanýcý sayfalarý düzenlenecek
+- Dashboard ypýlacak.
+- Admin paneli bildirim kýsmý düzenlenecek
+- UI Katmanýnda Footer kýsmý düzenlanecek
+- UI Katmanýnda fovori kýsmý yapýlacak
+- UI Katmanýnda ürünler kýsmýnda filtre kýsmý yapýlacak
+
+
+

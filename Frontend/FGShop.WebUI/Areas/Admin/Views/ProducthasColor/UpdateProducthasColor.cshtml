@@ -1,12 +1,15 @@
-﻿@model UpdateProducthasColorModel
+﻿
 @{
     ViewData["Title"] = "UpdateProducthasColor";
     Layout = "~/Areas/Admin/Views/AdminUILayout/Index.cshtml";
 }
 
+
+
+
 @{
-    var colors = ViewBag.Colors as ResultColorModel;  // ViewBag.Colors'ı uygun bir modele cast edin.
-    var selectedColors = ViewBag.SelectedColors as List<ColorResult>;  // ViewBag.SelectedColors'ı uygun bir modele cast edin.
+    var colors = ViewBag.Colors as ResultColorModel;  
+    var selectedColors = ViewBag.SelectedColors as List<ResultEFProducthasColorModel>;  
 }
 
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/quill.snow.css">
@@ -22,29 +25,25 @@
                 <div class="card">
                     <div class="card-body">
                         <div id="alert-container"></div>
-                        <form id="color-form" method="post" enctype="multipart/form-data" asp-action="UpdateProducthasColor">
+                        <form id="color-form" method="post" action="/Admin/ProducthasColor/UpdateProducthasColor">
                             <div class="form theme-form">
-                                <input type="hidden" asp-for="ProductId" value="@ViewBag.ProductId" />
+                                <input type="hidden" name="ProductId" value="@ViewBag.ProductId" />
                                 <div class="form-group">
                                     <label for="colors">Renkler</label>
-                                    
-
-                                    <select asp-for="ColorId" class="form-control" multiple="multiple" id="colors">
+                                    <select name="ColorId" class="form-control" multiple="multiple" id="colors">
                                         @foreach (var color in colors.Data)
                                         {
-                                            bool isSelected = selectedColors.Any(selectedcolor => selectedcolor.Id == color.Id);
 
-                                            if (isSelected)
-                                            {
-                                                <option selected value="@color.Id">@color.ColorName</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@color.Id">@color.ColorName</option>
-                                            }
+                                            bool isSelected = selectedColors.Any(selected => selected.ColorName == color.ColorName);
+                                            int? selectedId = selectedColors.FirstOrDefault(selected => selected.ColorName == color.ColorName)?.Id;
+
+                                            <option value="@color.Id" data-id="@selectedId" selected="@(isSelected ? "selected" : null)">@color.ColorName</option>
+
+
                                         }
                                     </select>
                                 </div>
+
                                 <div class="row">
                                     <div class="col text-end">
                                         <button type="submit" class="btn btn-success me-3">Güncelle</button>
@@ -86,37 +85,69 @@
 <script>
     $(document).ready(function () {
         $('#color-form').on('submit', function (e) {
-            e.preventDefault(); // Formun varsayılan davranışını engelle
+            e.preventDefault();
 
-            var formData = new FormData(this);
+            let models = [];
+            let removeModels = []; // Kaldırılan Id'ler için liste
+            const productId = $('input[name="ProductId"]').val(); // ProductId formun gizli alanından alınır.
+
+            $('#colors option').each(function () {
+                const colorId = $(this).val();
+                const id = $(this).data('id'); // Data-id özelliğinden Id alınır.
+                const isSelected = $(this).is(':selected');
+
+                if (isSelected) {
+                    // Seçili olan renkler için model oluştur
+                    models.push({
+                        Id: id || 0, // Yeni bir renk seçildiyse, Id sıfır gönderilir.
+                        ProductId: productId,
+                        ColorId: colorId
+                    });
+                } else if (id) {
+                    // Seçili olmayan ve mevcut olan renkler için kaldırma modeli oluştur
+                    removeModels.push({
+                        Id: id,
+                        ProductId: productId,
+                        ColorId: colorId
+                    });
+                }
+            });
+
+            if (models.length === 0 && removeModels.length === 0) {
+                $('#alert-container').html('<div class="alert alert-danger">Lütfen en az bir renk seçin.</div>');
+                setTimeout(function () {
+                    $('#alert-container').html('');
+                }, 5000);
+                return;
+            }
+
+            const dataToSend = {
+                addModels: models,
+                removeModels: removeModels,
+                productId : productId
+            };
 
             $.ajax({
                 type: 'POST',
                 url: '/Admin/ProducthasColor/UpdateProducthasColor',
-                data: formData,
-                contentType: false,
-                processData: false,
+                contentType: 'application/json',
+                data: JSON.stringify(dataToSend),
                 success: function (response) {
                     if (response.success) {
-                        window.location.href = response.redirectUrl;
+                        window.location.href = response.redirectUrl; // Başarılı olursa yönlendirme yap.
                     } else {
-                        $.each(response.errors, function (key, value) {
-                            var errorSpan = $('input[name="' + key + '"]').next('span');
-                            errorSpan.text(value);
-                        });
-
-                        if (response.errors.General) {
-                            $('#alert-container').html('<div class="alert alert-danger">' + response.errors.General + '</div>');
-                        }
+                        $('#alert-container').html('<div class="alert alert-danger">Hata: ' + response.message + '</div>');
                     }
                 },
                 error: function () {
                     $('#alert-container').html('<div class="alert alert-danger">Bilinmeyen bir hata oluştu.</div>');
                     setTimeout(function () {
-                        $('#alert-container').html(''); // Mesajı temizler
+                        $('#alert-container').html('');
                     }, 5000);
                 }
             });
         });
     });
+
+
 </script>

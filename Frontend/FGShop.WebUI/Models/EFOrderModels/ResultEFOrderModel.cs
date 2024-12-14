@@ -1,23 +1,29 @@
-﻿using FGShop.WebUI.Models.ColorModels;
-using FGShop.WebUI.Models.OrderModels;
-using FGShop.WebUI.Models.ProductModels;
-using FGShop.WebUI.Models.StatusModels;
-using FGShop.WebUI.Models.UserAddressModels;
-using FGShop.WebUI.Models.UserModels;
-using static FGShop.WebUI.Models.OrderModels.GetByOrderModel;
-using static FGShop.WebUI.Models.SizeModels.GetBySizeIdModel;
+﻿
 
 namespace FGShop.WebUI.Models.EFOrderModels
 {
     public class ResultEFOrderModel
     {
-        public GetByOrderModelSub? GetByOrderId { get; set; }
-        public GetByProductResult? GetByProductId { get; set; }
-        public UserInformationModel? UserList { get; set; }
-        public ResultUserAddressModel? ResultUserAddress { get; set; }
-        public GetByIdSize? GetBySizeId { get; set; }
-        public GetByColorIdResult? GetByColorId { get; set; }
-        public GetByStatusIdModel? ResultStatus { get; set; }
+        public int Id { get; set; }
+        public string? UserName { get; set; }
+        public string? ProductName { get; set; }
+        public int? OrderQuantity { get; set; }
+        public string? SizeName { get; set; }
+        public string? ColorName { get; set; }
+        public int? StatusId { get; set; }
+        public string? StatusName { get; set; }
+        public DateTime? OrderDate { get; set; }
+
+
+        //Adress bilgileri
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Country { get; set; }
+        public string? City { get; set; }
+        public string? District { get; set; }
+        public string? Neighbourhood { get; set; }
+        public string? Address { get; set; }
+
 
     }
 }

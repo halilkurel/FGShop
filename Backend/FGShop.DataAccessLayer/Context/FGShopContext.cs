@@ -7,18 +7,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FGShop.DataAccessLayer.Context
 {
-    public class FGShopContext: IdentityDbContext<ApplicationUser, ApplicationRole, int>
+    public class FGShopContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
 
-		public FGShopContext(DbContextOptions<FGShopContext> options) : base(options)
-		{
-
-		}
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public FGShopContext(DbContextOptions<FGShopContext> options) : base(options)
         {
-			base.OnModelCreating(modelBuilder);
 
-		}
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+        }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -31,23 +31,13 @@ namespace FGShop.DataAccessLayer.Context
         public DbSet<Color> Colors { get; set; }
         public DbSet<ProducthasColor> ProducthasColors { get; set; }
         public DbSet<Size> Sizes { get; set; }
-        public DbSet<ProducthasSize> ProducthasSizes { get; set; }
-        public DbSet<Stock> Stocks { get; set; }
-        public DbSet<ProducthasStock> producthasStocks { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<Order> Orders { get; set; }
-
-
-
-
-
-
-
-
-
+        public DbSet<ProducthasColorAndSize> producthasColorAndSizes { get; set; }
+        public DbSet<ProducthasColorAndSizehasStock> producthasColorAndSizehasStocks { get; set; }
 
     }
 }

@@ -8,8 +8,8 @@ namespace FGShop.EntityLayer.Entities
 {
     public class Contact: BaseEntity
     {
-        public string Message { get; set; }
-        public string Email { get; set; }
+        public string? Message { get; set; }
+        public string? Email { get; set; }
 
     }
 }

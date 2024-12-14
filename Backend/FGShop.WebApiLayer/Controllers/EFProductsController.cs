@@ -22,5 +22,14 @@ namespace FGShop.WebApiLayer.Controllers
 
 			return Ok(response);
 		}
+
+		[HttpGet("GetByProductandColorIdResultAll/{productId}/{colorId}")]
+		public async Task<IActionResult> GetByProductandColorIdResultAll(int productId, int colorId)
+		{
+			var response = await _productService.GetByProductandColorIdResultAll(productId,colorId);
+
+			return Ok(response);
+		}
 	}
+
 }

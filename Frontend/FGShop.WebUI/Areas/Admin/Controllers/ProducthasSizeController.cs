@@ -6,6 +6,11 @@ using FGShop.WebUI.Models.ColorModels;
 using FGShop.WebUI.Models.ProducthasColorModels;
 using System.Drawing;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
+using FGShop.WebUI.Models.EFProducthasColorModels;
+using System.Reflection;
+using FGShop.WebUI.Models.EFProducthasColorAndSizeModels;
+using FGShop.WebUI.Models.ProducthasStockModels;
 
 namespace FGShop.WebUI.Areas.Admin.Controllers
 {
@@ -27,50 +32,83 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
         {
             ViewBag.ProductId = id;
             var httpClient = _httpClientFactory.CreateClient();
+
+            //Önceki ekleme sayfasında product'ın Color biligileri eklendi onları getiriyoruz
+            var colorResponse = await httpClient.GetAsync($"https://localhost:7171/api/EFProducthasColors/GetByProductIdProducthasColorList/{id}");
+            if (colorResponse.IsSuccessStatusCode)
+            {
+                var colorJsonString = await colorResponse.Content.ReadAsStringAsync();
+                var colors = JsonConvert.DeserializeObject<List<ResultEFProducthasColorModel>> (colorJsonString);
+                ViewBag.Colors = colors;
+            }
+
+
+            // Burada Daha önce eklenmiş Size bilgilerini alıyoruz 
             var response = await httpClient.GetAsync("https://localhost:7171/api/Sizes");
 
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                var sizes = Newtonsoft.Json.JsonConvert.DeserializeObject<ResultSizeModel>(jsonString);
+                var sizes = Newtonsoft.Json.JsonConvert.DeserializeObject<ResultSizeModel>(jsonString).Data;
                 ViewBag.Sizes = sizes;
                 return View();
             }
-            else
-            {
-                return View();
-            }
+
+            return View();
 
         }
 
-
         [HttpPost]
         [Route("CreateProducthasSize")]
-        public async Task<IActionResult> CreateProducthasSize(CreateProducthasSizeModel model)
+        public async Task<IActionResult> CreateProducthasSize([FromBody]List<CreateProducthasSizeModel> models)
         {
+            if (models == null || !models.Any())
+            {
+                return Json(new { success = false, errors = "Geçersiz veri gönderildi." });
+            }
 
             if (ModelState.IsValid)
             {
                 var httpClient = _httpClientFactory.CreateClient();
 
-                foreach (var sizeId in model.SizeId)
+                foreach (var model in models)
                 {
-                    var producthassize = new CreateProducthasSizeApiModel
+                    foreach (var sizeId in model.SizeId)
                     {
-                        SizeId = sizeId,
-                        ProductId = model.ProductId
+                        var producthassize = new CreateProducthasSizeApiModel
+                        {
+                            SizeId = sizeId,
+                            ProducthasColorId = model.ProducthasColorId
+                        };
 
-                    };
+                        var content = new StringContent(
+                            Newtonsoft.Json.JsonConvert.SerializeObject(producthassize),
+                            Encoding.UTF8,
+                            "application/json"
+                        );
 
-                    var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(producthassize), Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync("https://localhost:7171/api/ProducthasSizes", content);
+                        var response = await httpClient.PostAsync(
+                            "https://localhost:7171/api/ProducthasColorAndSize",
+                            content
+                        );
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return Json(new { success = false, errors = "API isteği başarısız oldu." });
+                        }
+                    }
                 }
 
-                return Json(new { success = true, redirectUrl = Url.Action("CreateProducthasColor", "ProducthasColor", new { area = "Admin", id = model.ProductId }) });
-
+                return Json(new
+                {
+                    success = true,
+                    redirectUrl = Url.Action("CreateProducthasStock", "ProducthasStock", new { area = "Admin", id = models.FirstOrDefault()?.ProductId })
+                });
             }
-            return View(); // Hatalı durumlarda view geri dön
+
+            return Json(new { success = false, errors = "Model doğrulama hatası." });
         }
+
 
 
 
@@ -82,73 +120,97 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
         {
             ViewBag.ProductId = id;
             var httpClient = _httpClientFactory.CreateClient();
+
+            //Size bilgileri
             var sizes = await httpClient.GetAsync("https://localhost:7171/api/Sizes");
 
             if (sizes.IsSuccessStatusCode)
             {
                 var jsonString = await sizes.Content.ReadAsStringAsync();
-                var sizeList = Newtonsoft.Json.JsonConvert.DeserializeObject<ResultSizeModel>(jsonString);
+                var sizeList = Newtonsoft.Json.JsonConvert.DeserializeObject<ResultSizeModel>(jsonString).Data;
                 ViewBag.Sizes = sizeList;
             }
+            //Önceki ekleme sayfasında product'ın Color biligileri eklendi onları getiriyoruz
+            var colorResponse = await httpClient.GetAsync($"https://localhost:7171/api/EFProducthasColors/GetByProductIdProducthasColorList/{id}");
+            if (colorResponse.IsSuccessStatusCode)
+            {
+                var colorJsonString = await colorResponse.Content.ReadAsStringAsync();
+                var colors = JsonConvert.DeserializeObject<List<ResultEFProducthasColorModel>>(colorJsonString);
+                ViewBag.Colors = colors;
+            }
 
-
-            var selectedSizes = await httpClient.GetAsync($"https://localhost:7171/api/EFProducthasSizes/{id}");
+            var selectedSizes = await httpClient.GetAsync($"https://localhost:7171/api/EFProducthasColorAndSizes/{id}");
             if (selectedSizes.IsSuccessStatusCode)
             {
                 var jsonString2 = await selectedSizes.Content.ReadAsStringAsync();
-                var list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SizeResult>>(jsonString2);
+                var list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ResultEFProducthasColorAndSizeModel>>(jsonString2); 
                 ViewBag.SelectedSizes = list;
             }
-
-
             return View();
-
-
-
         }
 
 
         [HttpPost]
         [Route("UpdateProducthasSize")]
-        public async Task<IActionResult> UpdateProducthasSize(UpdateProducthasSizeModel model)
+        public async Task<IActionResult> UpdateProducthasSize([FromBody] UpdateProducthasSizeModel model)
         {
-            var ProductId = model.ProductId;
-            var httpClient = _httpClientFactory.CreateClient();
-            var sizes = await httpClient.GetAsync($"https://localhost:7171/api/EFProducthasSizes/GetByProductIdProducthasSizeList/{ProductId}");
-            if (sizes.IsSuccessStatusCode)
+            var client = _httpClientFactory.CreateClient();
+            var baseUrl = "https://localhost:7171/api/ProducthasColorAndSize"; // API base URL
+            // Ekleme işlemleri
+            foreach (var item in model.SelectedSizes)
             {
-                var jsonString = await sizes.Content.ReadAsStringAsync();
-                var sizeList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ResultProducthasSizeModel>>(jsonString);
-
-                foreach (var item in sizeList)
+                if (item.ProducthasColorAndSizeId == 0)
                 {
-                    var url = $"https://localhost:7171/api/ProducthasSizes/{item.Id}";
-                    var response = await httpClient.DeleteAsync(url);
-                }
-
-                foreach (var sizeId in model.SizeId)
-                {
-                    var producthassize = new CreateProducthasSizeApiModel
+                    var createApiModel = new CreateProducthasSizeApiModel
                     {
-                        SizeId = sizeId,
-                        ProductId = ProductId
+                        ProducthasColorId = item.ProducthasColorId,
+                        SizeId = item.SizeId
+                    };
+                    //Ekleme için createproducthasSize modlei oluşurulacak.
+                    var postResponse = await client.PostAsJsonAsync(baseUrl, createApiModel);
 
+
+                    //Son eklenen ProducthasColorAndSizeId bilgisini alalım
+                    var responseId = await client.GetAsync($"https://localhost:7171/api/EFProducthasColorAndSizes/LastAddedDataId/{model.ProductId}");
+                    var responseIdforString = await responseId.Content.ReadAsStringAsync();
+                    var responseIdResult = JsonConvert.DeserializeObject<int>(responseIdforString);
+
+                    var createProducthasSizeApi = new CreateProducthasStockModel
+                    {
+                        ProducthasColorAndSizeId = responseIdResult,
+                        Stock = 0
                     };
 
-                    var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(producthassize), Encoding.UTF8, "application/json");
-                    await httpClient.PostAsync("https://localhost:7171/api/ProducthasSizes", content);
+                    //ProducthasStock için ekleme işlemi yapacağız
+                    var createProducthasStockUrl = "https://localhost:7171/api/ProducthasColorAndSizehasStocks";
+                    var responseProducthasStock = await client.PostAsJsonAsync(createProducthasStockUrl,createProducthasSizeApi);
 
-
+                    
+                    if (!postResponse.IsSuccessStatusCode && responseProducthasStock.IsSuccessStatusCode)
+                    {
+                        return Json(new { success = false, message = "Post işlemi başarısız oldu." });
+                    }
                 }
-                return Json(new { success = true, redirectUrl = Url.Action("Index", "ProductDetail", new { area = "Admin", id = model.ProductId }) });
-
-
             }
-            return View();
+
+            // Silme işlemleri
+            foreach (var removeModel in model.DeselectedSizes)
+            {
+                var deleteUrl = $"{baseUrl}/{removeModel.ProducthasColorAndSizeId}";
+                var deleteResponse = await client.DeleteAsync(deleteUrl);
+                if (!deleteResponse.IsSuccessStatusCode)
+                {
+                    return Json(new { success = false, message = "Delete işlemi başarısız oldu." });
+                }
+            }
+
+            return Json(new { success = true });
         }
 
-
-
-
     }
+
+
+
+
 }
+

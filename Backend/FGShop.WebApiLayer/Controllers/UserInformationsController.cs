@@ -21,5 +21,12 @@ namespace FGShop.WebApiLayer.Controllers
 			var data = await _userInformationService.GetByUserName(userName);
 			return Ok(data);
 		}
+
+		[HttpGet("GetByUserIdResultUserName/{id}")]
+		public async Task<IActionResult> GetByUserIdResultUserName(int id)
+		{
+			var data = await _userInformationService.GetByUserId(id);
+			return Ok(data);
+		}
 	}
 }

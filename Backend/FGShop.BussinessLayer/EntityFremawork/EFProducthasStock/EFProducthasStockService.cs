@@ -1,12 +1,7 @@
-﻿using AutoMapper;
-using FGShop.DataAccessLayer.Context;
-using FGShop.DtoLayer.ColorDtos;
-using FGShop.DtoLayer.ProducthasStockDtos;
-using FGShop.DtoLayer.StockDtos;
-using FGShop.EntityLayer.Entities;
+﻿using FGShop.DataAccessLayer.Context;
+using FGShop.DtoLayer.EFProducthasColorAndSizeAndStockDtos;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,40 +12,37 @@ namespace FGShop.BussinessLayer.EntityFremawork.EFProducthasStock
     public class EFProducthasStockService : IEFProducthasStockService
     {
         private readonly FGShopContext _context;
-        private readonly IMapper _mapper;
 
-        public EFProducthasStockService(FGShopContext context, IMapper mapper)
+        public EFProducthasStockService(FGShopContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<ResultProducthasStockDto> GetByProductIdProducthasStockList(int id)
+        public async Task<int> GetByProductId(int productId)
         {
-            var producthasStockList = await _context.Set<ProducthasStock>()
-                                        .Where(x => x.ProductId == id).ToListAsync();
+            var totalStock = await _context.producthasColorAndSizehasStocks
+                .Where(x => x.ProducthasColorAndSize.ProducthasColor.Product.Id == productId)
+                .SumAsync(a => a.Stock);
 
-            var list = _mapper.Map<ResultProducthasStockDto>(producthasStockList.FirstOrDefault());
-            return list;
+            return totalStock;
+
+
         }
 
-        public async Task<List<ResultStockDto>> GetByProductIdStock(int id)
+        //Admin panelinde stok güncelleme sayfası için 
+        public async Task<List<ResultEFProducthasColorAndSizeDto>> GetByProductIdAndColorSizeStock(int productId)
         {
-
-            var producthasStockList = await _context.Set<ProducthasStock>()
-                                                    .Where(x => x.ProductId == id).ToListAsync();
-                                                    
-
-            var stockIds = producthasStockList.Select(x => x.StockId).ToList();
-
-
-            var stocks = await _context.Set<Stock>()
-                                        .Where(image => stockIds.Contains(image.Id))
-                                        .ToListAsync();
-
-
-            var list = _mapper.Map<List<ResultStockDto>>(stocks);
-            return list;
+            var data = await _context.producthasColorAndSizehasStocks
+                .Where(x => x.ProducthasColorAndSize.ProducthasColor.ProductId == productId)
+                .Select(g => new ResultEFProducthasColorAndSizeDto
+                {
+                    Id = g.Id,
+                    ProducthasColorAndSizeId = g.ProducthasColorAndSizeId,
+                    ColorName= g.ProducthasColorAndSize.ProducthasColor.Color.ColorName,
+                    Stock= g.Stock,
+                    SizeName= g.ProducthasColorAndSize.Size.SizeName
+                }).ToListAsync();
+            return data;
         }
     }
 }

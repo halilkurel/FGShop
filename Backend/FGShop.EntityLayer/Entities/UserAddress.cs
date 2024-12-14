@@ -17,7 +17,6 @@ namespace FGShop.EntityLayer.Entities
         public string? Neighbourhood { get; set; }
         public string? Address { get; set; }
 
-        public ICollection<Order>? Orders { get; set; }
 
     }
 }

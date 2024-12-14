@@ -1,4 +1,5 @@
 ﻿using FGShop.WebUI.Models.EFProductsModel;
+using FGShop.WebUI.Models.ImageModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -16,14 +17,15 @@ namespace FGShop.WebUI.Controllers
 
 		public async Task<PartialViewResult> Modal()
 		{
-			ViewBag.ProductId = 96;
 			var client = _httpClientFactory.CreateClient();
-			string url = $"https://localhost:7171/api/EFProducts/GetByProductIdProductAllResult/{96}";
+			string url = $"https://localhost:7171/api/EFProducthasImages/{96}";
 			var response = await client.GetAsync(url);
 			var jsonProduct = await response.Content.ReadAsStringAsync();
-			var data = JsonConvert.DeserializeObject<ResultEFProductModel>(jsonProduct);
-
-			return PartialView(data);
+			var data = JsonConvert.DeserializeObject<List<ImageResult>>(jsonProduct);
+			ViewBag.Images = data;
+			return PartialView();
 		}
+
+
 	}
 }

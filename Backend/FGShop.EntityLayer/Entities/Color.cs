@@ -8,7 +8,6 @@ namespace FGShop.EntityLayer.Entities
 {
     public class Color: BaseEntity
     {
-        public string ColorName { get; set; }
-        public ICollection<Order>? Orders { get; set; }
+        public string? ColorName { get; set; }
     }
 }

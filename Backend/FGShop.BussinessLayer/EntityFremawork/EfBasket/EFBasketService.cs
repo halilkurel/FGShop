@@ -39,8 +39,8 @@ namespace FGShop.BussinessLayer.EntityFremawork.EfOrder
 			var basketData = await _context.Baskets
 				.Where(x => x.UserId == userId)
 				.Include(b => b.Product)
-				.Include(b => b.Color)
-				.Include(b => b.Size)
+				.Include(c => c.Color)
+				.Include(d => d.Size)
 				.ToListAsync();
 
 			var resultEFOrderDtos = basketData.Select(basket => new ResultEFOrderDto

@@ -2,14 +2,15 @@
 @{
     ViewData["Title"] = "CreateProducthasSize";
     Layout = "~/Areas/Admin/Views/AdminUILayout/Index.cshtml";
-}
+    var colors = ViewBag.Colors as List<ResultEFProducthasColorModel>;
+    var size = ViewBag.Sizes as List<SizeResult>;
 
+}
 
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/quill.snow.css">
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/intltelinput.min.css">
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/tagify.css">
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/flatpickr/flatpickr.min.css">
-
 
 <div class="page-body">
     <div class="container-fluid">
@@ -18,18 +19,25 @@
                 <div class="card">
                     <div class="card-body">
                         <div id="alert-container"></div>
-                        <form id="product-form" method="post" enctype="multipart/form-data" asp-action="CreateProducthasSize">
+                        <form id="product-form">
                             <div class="form theme-form">
-                                <input type="hidden" asp-for="ProductId" value="@ViewBag.ProductId" />
-                                <div class="form-group">
-                                    <label for="sizes">Kategoriler</label>
-                                    <select asp-for="SizeId" class="form-control" multiple="multiple" id="sizes">
-                                        @foreach (var size in ViewBag.Sizes.Data)
-                                        {
-                                            <option value="@size.Id">@size.SizeName</option>
-                                        }
-                                    </select>
-                                </div>
+                                @foreach (var color in colors)
+                                {
+                                    <div class="row color-group">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="size-select-@color.Id">@color.ColorName</label>
+                                                <input type="hidden" name="ProducthasColorId" value="@color.Id" />
+                                                <select class="form-select input-air-primary digits size-select" id="size-select-@color.Id" name="SizeId" multiple="">
+                                                    @foreach (var item in size)
+                                                    {
+                                                        <option value="@item.Id">@item.SizeName</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                                 <div class="row">
                                     <div class="col text-end">
                                         <button type="submit" class="btn btn-success me-3">Ekle</button>
@@ -67,42 +75,56 @@
 <!-- Theme js-->
 <script src="/Riho-Bootstrap-Admin/admin/assets/js/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
     $(document).ready(function () {
         $('#product-form').on('submit', function (e) {
-            e.preventDefault(); // Formun varsayılan davranışını engelle
+            e.preventDefault();
 
-            var formData = new FormData(this);
+            const colorGroups = $('.color-group');
+            const models = [];
+
+            colorGroups.each(function () {
+                const colorId = $(this).find('input[name="ProducthasColorId"]').val();
+                const selectedSizes = $(this).find('select[name="SizeId"]').val();
+                const productId = @ViewBag.ProductId;
+                
+
+                if (selectedSizes && selectedSizes.length > 0) {
+                    models.push({
+                        ProducthasColorId: colorId,
+                        SizeId: selectedSizes,
+                        ProductId: productId
+                    });
+                }
+            });
+
+            if (models.length === 0) {
+                $('#alert-container').html('<div class="alert alert-danger">Lütfen en az bir renk ve boyut seçin.</div>');
+                setTimeout(function () {
+                    $('#alert-container').html('');
+                }, 5000);
+                return;
+            }
 
             $.ajax({
                 type: 'POST',
                 url: '/Admin/ProducthasSize/CreateProducthasSize',
-                data: formData,
-                contentType: false,
-                processData: false,
+                contentType: 'application/json',
+                data: JSON.stringify(models),
                 success: function (response) {
                     if (response.success) {
                         window.location.href = response.redirectUrl;
                     } else {
-                        $.each(response.errors, function (key, value) {
-                            var errorSpan = $('input[name="' + key + '"]').next('span');
-                            errorSpan.text(value);
-                        });
-
-                        if (response.errors.General) {
-                            $('#alert-container').html('<div class="alert alert-danger">' + response.errors.General + '</div>');
-                        }
+                        $('#alert-container').html('<div class="alert alert-danger">Hata: ' + response.errors + '</div>');
                     }
                 },
-                error: function () {
-                    $('#alert-container').html('<div class="alert alert-danger">Bilinmeyen bir hata oluştu.</div>');
-                    setTimeout(function () {
-                        $('#alert-container').html(''); // Mesajı temizler
-                    }, 5000);
+            error: function () {
+                $('#alert-container').html('<div class="alert alert-danger">Bilinmeyen bir hata oluştu.</div>');
+                setTimeout(function () {
+                        $('#alert-container').html('');
+                }, 5000);
                 }
-            });
+        });
         });
     });
 </script>
-

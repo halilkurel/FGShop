@@ -1,7 +1,9 @@
-﻿@model CreateProducthasStockModel
+﻿@model CreateProducthasColorAndSizehasStockModel
+
 @{
     ViewData["Title"] = "CreateProducthasStock";
     Layout = "~/Areas/Admin/Views/AdminUILayout/Index.cshtml";
+    var data = ViewBag.Data as List<ResultEFProducthasColorAndSizeModel>;
 }
 
 
@@ -10,34 +12,76 @@
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/tagify.css">
 <link rel="stylesheet" type="text/css" href="/Riho-Bootstrap-Admin/admin/assets/css/vendors/flatpickr/flatpickr.min.css">
 
-
 <div class="page-body">
+    <div class="container-fluid">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-6">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">
+                                <svg class="stroke-icon">
+                                    <use href="../assets/svg/icon-sprite.svg#stroke-home"></use>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">Ürün </li>
+                        <li class="breadcrumb-item active">Stok</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
+                    <div class="card-header">
+                        <h4>Stok Bilgisi</h4>
+                    </div>
                     <div class="card-body">
-                        <div id="alert-container"></div>
-                        <form id="stock-form" method="post" enctype="multipart/form-data" asp-action="CreateProducthasStock">
-                            <div class="form theme-form">
-                                <input type="hidden" asp-for="ProductId" value="@ViewBag.ProductId" />
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <label asp-for="StockQuantity"></label>
-                                            <input class="form-control" asp-for="StockQuantity" type="text" placeholder="Adet *">
-                                            <span class="text-danger email-error"></span>
+                        <div class="row">
+                            <form id="product-form">
+                                <div class="order-history table-responsive wishlist custom-scrollbar">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Renk</th>
+                                                <th>Beden</th>
+                                                <th>Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in data)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="product-name"><a href="#">@item.ColorName</a></div>
+                                                    </td>
+                                                    <td>@item.SizeNames</td>
+                                                    <td>
+                                                        <fieldset class="qty-box">
+                                                            <div class="input-group">
+                                                                <input type="hidden" name="ProducthasColorAndSizeId" value="@item.ProducthasColorAndSizeId" />
+                                                                <input class="touchspin text-center" type="text" name="Stock" value="1">
+                                                            </div>
+                                                        </fieldset>
+                                                    </td>
+                                                </tr>
+                                            }
+                                            
+                                        </tbody>
+                                        <div class="row">
+                                            <div class="col text-end">
+                                                <button type="submit" class="btn btn-success me-3">Ekle</button>
+                                                <a class="btn btn-danger" href="/Admin/Product/Index">İptal</a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </table>
                                 </div>
-                                <div class="row">
-                                    <div class="col text-end">
-                                        <button type="submit" class="btn btn-success me-3">Ekle</button>
-                                        <a class="btn btn-danger" href="/Admin/Product/Index">İptal</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,46 +106,61 @@
 <script src="/Riho-Bootstrap-Admin/admin/assets/js/slick/slick.min.js"></script>
 <script src="/Riho-Bootstrap-Admin/admin/assets/js/slick/slick.js"></script>
 <script src="/Riho-Bootstrap-Admin/admin/assets/js/header-slick.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/touchspin/input-groups.min.js"></script>
 
 <!-- Plugins JS Ends-->
 <!-- Theme js-->
 <script src="/Riho-Bootstrap-Admin/admin/assets/js/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
     $(document).ready(function () {
-        $('#stock-form').on('submit', function (e) {
-            e.preventDefault(); // Formun varsayılan davranışını engelle
+        $('#product-form').on('submit', function (e) {
+            e.preventDefault();
 
-            var formData = new FormData(this);
+            // Verileri toplamak için bir model listesi oluşturuyoruz
+            let models = [];
+            $('#product-form tbody tr').each(function () {
+                const producthasColorAndSizeId = $(this).find('input[name="ProducthasColorAndSizeId"]').val();
+                const stock = $(this).find('input[name="Stock"]').val();
 
+                if (producthasColorAndSizeId && stock) {
+                    models.push({
+                        ProducthasColorAndSizeId: producthasColorAndSizeId,
+                        Stock: stock
+                    });
+                }
+            });
+
+            // Eğer model listesi boşsa, kullanıcıya bir uyarı göster
+            if (models.length === 0) {
+                $('#alert-container').html('<div class="alert alert-danger">Lütfen en az bir renk ve boyut seçin.</div>');
+                setTimeout(function () {
+                    $('#alert-container').html('');
+                }, 5000);
+                return;
+            }
+
+            // AJAX ile modeli gönder
             $.ajax({
                 type: 'POST',
                 url: '/Admin/ProducthasStock/CreateProducthasStock',
-                data: formData,
-                contentType: false,
-                processData: false,
+                contentType: 'application/json',
+                data: JSON.stringify(models),
                 success: function (response) {
                     if (response.success) {
-                        window.location.href = response.redirectUrl;
+                        window.location.href = response.redirectUrl; // Başarılıysa yönlendirme
                     } else {
-                        $.each(response.errors, function (key, value) {
-                            var errorSpan = $('input[name="' + key + '"]').next('span');
-                            errorSpan.text(value);
-                        });
-
-                        if (response.errors.General) {
-                            $('#alert-container').html('<div class="alert alert-danger">' + response.errors.General + '</div>');
-                        }
+                        $('#alert-container').html('<div class="alert alert-danger">Hata: ' + response.errors + '</div>');
                     }
                 },
                 error: function () {
                     $('#alert-container').html('<div class="alert alert-danger">Bilinmeyen bir hata oluştu.</div>');
                     setTimeout(function () {
-                        $('#alert-container').html(''); // Mesajı temizler
+                        $('#alert-container').html('');
                     }, 5000);
                 }
             });
         });
     });
+
 </script>

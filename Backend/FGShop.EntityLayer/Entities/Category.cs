@@ -8,12 +8,12 @@ namespace FGShop.EntityLayer.Entities
 {
     public class Category: BaseEntity
     {
-        public string CategoryName { get; set; }
+        public string? CategoryName { get; set; }
         public string? CoverPhoto { get; set; }
 
 
         // Navigation property
-        public ICollection<ProducthasCategory> ProducthasCategories { get; set; }
+        public ICollection<ProducthasCategory>? ProducthasCategories { get; set; }
 
     }
 }

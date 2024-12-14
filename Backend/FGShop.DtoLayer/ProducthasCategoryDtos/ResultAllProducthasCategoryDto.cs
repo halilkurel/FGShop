@@ -8,7 +8,7 @@ namespace FGShop.DtoLayer.ProducthasCategoryDtos
 {
 	public class ResultAllProducthasCategoryDto
 	{
-        public int? ProductId { get; set; }
+        public int ProductId { get; set; }
         public string? ProductName { get; set; }
 		public string? CoverPhoto { get; set; }
 		public decimal? Price { get; set; }

@@ -15,23 +15,24 @@ namespace FGShop.WebApiLayer.Controllers
             _service = service;
         }
 
-
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByProductIdStockList(int id)
+        public async Task<IActionResult> GetByProductIdColorList(int id)
         {
-            var response = await _service.GetByProductIdStock(id);
-
-            return Ok(response);
-        }
-
-        [HttpGet("GetByProductIdProducthasStockList/{id}")]
-        public async Task<IActionResult> GetByProductIdProducthasStockList(int id)
-        {
-            var response = await _service.GetByProductIdProducthasStockList(id);
+            var response = await _service.GetByProductId(id);
 
             return Ok(response);
         }
 
 
+        [HttpGet("GetByProductIdAndColorSizeStock/{id}")]
+        public async Task<IActionResult> GetByProductIdAndColorSizeStock(int id)
+        {
+            var response = await _service.GetByProductIdAndColorSizeStock(id);
+
+            return Ok(response);
+        }
+
+
+        
     }
 }

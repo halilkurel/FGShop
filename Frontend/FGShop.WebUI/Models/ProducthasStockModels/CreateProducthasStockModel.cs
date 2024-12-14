@@ -2,7 +2,7 @@
 {
     public class CreateProducthasStockModel
     {
-        public int ProductId { get; set; }
-        public int StockQuantity { get; set; }
+        public int ProducthasColorAndSizeId { get; set; }
+        public int Stock { get; set; }
     }
 }

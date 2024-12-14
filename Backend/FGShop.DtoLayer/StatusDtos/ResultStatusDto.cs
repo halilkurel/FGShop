@@ -8,7 +8,7 @@ namespace FGShop.DtoLayer.StatusDtos
 {
     public class ResultStatusDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string? StatusName { get; set; }
     }
 }

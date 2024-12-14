@@ -1,4 +1,5 @@
 ﻿using FGShop.WebUI.Areas.Admin.Models.ProdcutModels;
+using FGShop.WebUI.Models.ImageModels;
 using FGShop.WebUI.Models.ProductModels;
 using FGShop.WebUI.Models.ValdiationModels;
 using Microsoft.AspNetCore.Authorization;
@@ -60,6 +61,7 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
 
                 // Ürünün veritabanında kayıtlı olan yolunu alalım
                 var product = productResultModel.Data.CoverPhoto;
+                
 
                 if (product != null && !string.IsNullOrEmpty(product))
                 {
@@ -67,6 +69,22 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
                     if (System.IO.File.Exists(filePath))
                     {
                         System.IO.File.Delete(filePath);
+                    }
+                }
+
+
+                var imageResponse= await httpClient.GetAsync($"https://localhost:7171/api/EFProducthasImages/{id}");
+                if (imageResponse.IsSuccessStatusCode)
+                {
+                    var imageJson = await imageResponse.Content.ReadAsStringAsync();
+                    var imageResultModel = JsonConvert.DeserializeObject<List<ImageResult>>(imageJson);
+                    foreach(var imageurl in imageResultModel)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imageurl.ImageUrl.TrimStart('/'));
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
                     }
                 }
             }

@@ -2,7 +2,7 @@
 {
     public class CreateProducthasSizeApiModel
     {
-        public int ProductId { get; set; }
+        public int ProducthasColorId { get; set; }
         public int SizeId { get; set; }
     }
 }

@@ -2,7 +2,11 @@
 {
     public class CreateProducthasSizeModel
     {
-        public int ProductId { get; set; }
+
+        public int ProducthasColorId { get; set; }
         public List<int> SizeId { get; set; }
+        public int? ProductId { get; set; }
+
+
     }
 }
