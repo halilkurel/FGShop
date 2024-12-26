@@ -150,7 +150,7 @@
                     <form id="logoutForm" asp-area="Admin" asp-controller="LoginSignIn" asp-action="LogOut" method="post" style="display: none;">
                         <!-- Form gizli, JavaScript ile tetiklenecek -->
                     </form>
-                    <a href="javascript:void(0);" class="sidebar-link sidebar-title link-nav" onclick="document.getElementById('logoutForm').submit();" style="display: flex; align-items: center;">
+                    <a href="/LoginSignIn/LogOut" class="sidebar-link sidebar-title link-nav" onclick="document.getElementById('logoutForm').submit();" style="display: flex; align-items: center;">
                         <i class="fa fa-thumb-tack"></i>
                         <svg class="stroke-icon">
                             <use href="../assets/svg/icon-sprite.svg#stroke-landing-page"></use>

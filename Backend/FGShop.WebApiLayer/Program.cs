@@ -1,4 +1,5 @@
 using FGShop.BussinessLayer.DependencyResolvers.Microsoft;
+using FGShop.WebApiLayer.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -9,11 +10,16 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
+        policy.AllowAnyHeader()
+              .SetIsOriginAllowed((host) => true)
+              .AllowCredentials()
               .AllowAnyMethod();
+
+
     });
 });
+
+builder.Services.AddSignalR();
 
 // JWT kimlik doðrulama ayarlarýný yapýlandýrýn
 builder.Services.AddAuthentication(options =>
@@ -62,5 +68,7 @@ app.UseAuthentication(); // Kimlik doðrulama middleware'ýný ekleyin
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<SignalRHub>("/signalrhub");
 
 app.Run();

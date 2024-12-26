@@ -70,6 +70,7 @@ namespace FGShop.WebUI.Controllers
 			return PartialView();
 		}
 
+
         [HttpPost]
         public async Task<IActionResult> SignInPartial(LogInModel model)
         {
@@ -138,7 +139,8 @@ namespace FGShop.WebUI.Controllers
             return Json(new { success = false, errors = errorDict });
         }
 
-        [HttpPost]
+
+        [HttpGet]
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync();

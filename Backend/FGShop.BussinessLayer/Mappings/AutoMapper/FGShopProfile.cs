@@ -6,6 +6,7 @@ using FGShop.DtoLayer.CategoryDtos;
 using FGShop.DtoLayer.ColorDtos;
 using FGShop.DtoLayer.ContactDtos;
 using FGShop.DtoLayer.ImageDtos;
+using FGShop.DtoLayer.LikeDtos;
 using FGShop.DtoLayer.OrderDtos;
 using FGShop.DtoLayer.ProductDtos;
 using FGShop.DtoLayer.ProducthasCategoryDtos;
@@ -127,8 +128,13 @@ namespace FGShop.BussinessLayer.Mappings.AutoMapper
             CreateMap<Order, UpdateOrderDto>().ReverseMap();
             CreateMap<ResultOrderDto, UpdateOrderDto>().ReverseMap();
 
+            CreateMap<Like, ResultLikeDto>().ReverseMap();
+            CreateMap<Like, CreateLikeDto>().ReverseMap();
+            CreateMap<Like, UpdateLikeDto>().ReverseMap();
+            CreateMap<Like, GetByLikeIdDto>().ReverseMap();
 
-			CreateMap<ProducthasColorAndSize, CreateProducthasColorAndSizeDto>().ReverseMap();
+
+            CreateMap<ProducthasColorAndSize, CreateProducthasColorAndSizeDto>().ReverseMap();
 			CreateMap<ProducthasColorAndSize, UpdateProducthasColorAndSizeDto>().ReverseMap();
 			CreateMap<ProducthasColorAndSize, ResultProducthasColorAndSizeDto>().ReverseMap();
 			CreateMap<ProducthasColorAndSize, GetByProducthasColorAndSizeIdDto>().ReverseMap();

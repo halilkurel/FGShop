@@ -31,6 +31,8 @@ namespace FGShop.WebUI.Areas.Admin.Controllers
             return View(orders);
         }
 
+
+
         [Route("OrderDetailPage/{orderId}")]
         public async Task<IActionResult> OrderDetailPage(int orderId)
         {

@@ -212,6 +212,32 @@
         $('.js-sidebar').removeClass('show-sidebar');
     });
 
+
+
+
+    /*==================================================================
+ [ Cart ]*/
+    $('.js-like-cart').on('click', function () {
+        $('.js-likepanel-cart').addClass('show-header-cart');
+    });
+
+    $('.js-likehide-cart').on('click', function () {
+        $('.js-likepanel-cart').removeClass('show-header-cart');
+    });
+
+    /*==================================================================
+    [ Cart ]*/
+    $('.js-show-sidebar').on('click', function () {
+        $('.js-sidebar').addClass('show-sidebar');
+    });
+
+    $('.js-hide-sidebar').on('click', function () {
+        $('.js-sidebar').removeClass('show-sidebar');
+    });
+
+
+
+
     /*==================================================================
     [ +/- num product ]*/
     $('.btn-num-product-down').on('click', function(){

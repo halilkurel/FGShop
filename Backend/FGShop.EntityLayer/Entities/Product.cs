@@ -19,6 +19,8 @@ namespace FGShop.EntityLayer.Entities
         public ICollection<ProducthasCategory>? ProducthasCategories { get; set; }
         public ICollection<ProducthasImage>? producthasImages { get; set; }
         public ICollection<ProducthasColor>? ProducthasColors { get; set; }
+        public ICollection<Like> Likes { get; set; }
+
 
 
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FGShop.BussinessLayer.EntityFremawork.EFLike;
 using FGShop.BussinessLayer.EntityFremawork.EfOrder;
 using FGShop.BussinessLayer.EntityFremawork.EFOrder;
 using FGShop.BussinessLayer.EntityFremawork.EFProduct;
@@ -19,6 +20,7 @@ using FGShop.BussinessLayer.ValidationRules.CategoryValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ColorValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ContactValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ImageValidationRules;
+using FGShop.BussinessLayer.ValidationRules.LikeValidationRules;
 using FGShop.BussinessLayer.ValidationRules.OrderValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProducthasCategoryValidationRules;
 using FGShop.BussinessLayer.ValidationRules.ProducthasColorAndProducthasSizeStockRules;
@@ -38,6 +40,7 @@ using FGShop.DtoLayer.CategoryDtos;
 using FGShop.DtoLayer.ColorDtos;
 using FGShop.DtoLayer.ContactDtos;
 using FGShop.DtoLayer.ImageDtos;
+using FGShop.DtoLayer.LikeDtos;
 using FGShop.DtoLayer.OrderDtos;
 using FGShop.DtoLayer.ProductDtos;
 using FGShop.DtoLayer.ProducthasCategoryDtos;
@@ -144,6 +147,9 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddTransient<IValidator<CreateProducthasColorAndSizehasStockDto>, CreateProducthasColorAndSizehasStockValidator>();
             services.AddTransient<IValidator<UpdateProducthasColorAndSizehasStockDto>, UpdateProducthasColorAndSizehasStockValidator>();
 
+            services.AddTransient<IValidator<CreateLikeDto>, CreateLikeDtoValidator>();
+            services.AddTransient<IValidator<UpdateLikeDto>, UpdateLikeDtoValidator>();
+
 
 
             services.AddScoped<IProductService, ProductService>();
@@ -165,6 +171,7 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IProducthasColorAndSizeService, ProducthasColorAndSizeDtoService>();
             services.AddScoped<IProducthasColorAndSizehasStockService, ProducthasColorAndSizehasStockService>();
+            services.AddScoped<ILikeService, LikeService>();
 
 
             
@@ -181,6 +188,7 @@ namespace FGShop.BussinessLayer.DependencyResolvers.Microsoft
             services.AddScoped<IEFProducthasColorAndSizeService, EFProducthasColorAndSizeService>();
             services.AddScoped<IEFProducthasSizeService, EFProducthasSizeService>();
             services.AddScoped<IEFProducthasStockService, EFProducthasStockService>();
+            services.AddScoped<IEFLikeService, EFLikeService>();
 
 
 

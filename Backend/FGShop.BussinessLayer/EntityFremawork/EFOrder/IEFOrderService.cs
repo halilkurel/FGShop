@@ -15,5 +15,9 @@ namespace FGShop.BussinessLayer.EntityFremawork.EFOrder
         Task<List<ResultJoinOrderDto>> ListApprovedOrders();
         Task<List<ResultJoinOrderDto>> ListOrderCompleted();
         Task<ResultJoinOrderDto> GetByOrderId(int orderId);
+        Task<List<ResultJoinOrderDto>> GetByUserNameOrders(string userName);
+        Task<List<ResultJoinOrderDto>> Last4OrderList();
+
+
     }
 }

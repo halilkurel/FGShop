@@ -1,0 +1,36 @@
+﻿@model UserInformationModel
+
+<div class="card height-equal">
+    <div class="card-body custom-input">
+        <form class="row g-3" method="post" asp-action="UpdateUserPageProfile" asp-controller="UserPage">
+            <div class="col-12">
+                <label class="form-label" for="user-name">Kullanıcı Adı</label>
+                <input class="form-control" asp-for="Username" id="user-name" type="text" value="@Model.Username" aria-label="User name" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label" for="first-name">İsim</label>
+                <input class="form-control" asp-for="Name" id="first-name" type="text" value="@Model.Name" aria-label="First name" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label" for="last-name">Soyisim</label>
+                <input class="form-control" asp-for="Surname" id="last-name" type="text" value="@Model.Surname" aria-label="Last name" required>
+            </div>
+
+            <div class="col-12">
+                <label class="form-label" for="exampleFormControlInput1">Mail Adresi</label>
+                <input class="form-control" asp-for="Email" id="exampleFormControlInput1" type="email" value="@Model.Email" required>
+            </div>
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <div class="col-12">
+                <label class="form-label"  for="phone-number">Telefon Numarası</label>
+                <input class="form-control" asp-for="PhoneNumber" id="phone-number" type="text" value="@Model.PhoneNumber" required>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Güncelle</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@* Güncelleme için post metotu yazılacak *@

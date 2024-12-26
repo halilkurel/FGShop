@@ -1,5 +1,6 @@
 ﻿using FGShop.WebUI.Models.CartModels;
 using FGShop.WebUI.Models.CategoryModels;
+using FGShop.WebUI.Models.EFLikeModels;
 using FGShop.WebUI.Models.ProducthasCategoryModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -32,7 +33,13 @@ namespace FGShop.WebUI.Controllers
             ViewBag.Cart = cart;
 
 
-            var responseMessage = await client.GetAsync("https://localhost:7171/api/Categories");
+			var response1 = await client.GetAsync($"https://localhost:7171/api/EFLikes/GetByUserIdGetAllLikes/{userId}");
+			var jsonString1 = await response1.Content.ReadAsStringAsync();
+			var model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetByUserIdGetAllLikes>>(jsonString1);
+			ViewBag.LikeCart = model;
+
+
+			var responseMessage = await client.GetAsync("https://localhost:7171/api/Categories");
             if (responseMessage.IsSuccessStatusCode)
             {
                 var jsonData = await responseMessage.Content.ReadAsStringAsync();

@@ -1,4 +1,5 @@
 ﻿using FGShop.BussinessLayer.Interfaces;
+using FGShop.DtoLayer.UserDtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,5 +29,20 @@ namespace FGShop.WebApiLayer.Controllers
 			var data = await _userInformationService.GetByUserId(id);
 			return Ok(data);
 		}
-	}
+
+        [HttpGet("GetByUserIdInformation/{id}")]
+        public async Task<IActionResult> GetByUserIdInformation(int id)
+        {
+            var data = await _userInformationService.GetByUserIdInformation(id);
+            return Ok(data);
+        }
+
+		[HttpPut]
+		public async Task<IActionResult> UpdateUserInformation(UpdateUserInformationDto dto)
+		{
+			var data = await _userInformationService.UpdateUserInformationDto(dto);
+			return Ok(data);
+		}
+		
+    }
 }

@@ -78,7 +78,7 @@
 		<!--  -->
 		<div class="flex-w flex-m p-l-100 p-t-40 respon7">
 			<div class="flex-m bor9 p-r-10 m-r-11">
-				<a href="~/cozastore-master/#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
+				<a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
 					<i class="zmdi zmdi-favorite"></i>
 				</a>
 			</div>
@@ -100,6 +100,107 @@
 
 
 <script>
+	//Lİke tablosu kontrol
+	$(document).ready(function () {
+		const productId = $('input[name="productId"]').val();
+
+		// Beğeni durumu kontrolü
+		$.ajax({
+			type: 'GET',
+			url: `/Like/CheckLikeStatus?productId=${productId}`,
+			success: function (response) {
+				if (response.success) {
+					if (response.isLiked) {
+						// Eğer kullanıcı ürünü beğenmişse, ikon mavi yapılır
+						$('.js-addwish-detail i').css('color', '#717fe0');
+					}
+				}
+			},
+			error: function () {
+				console.error("Beğeni durumu kontrol edilirken bir hata oluştu.");
+			}
+		});
+	});
+
+
+
+	//Like
+	$(document).ready(function () {
+		$('.zmdi-favorite').on('click', function (e) {
+			e.preventDefault();
+
+			var productId = $('input[name="productId"]').val(); // Ürün ID'sini al
+			var likeIcon = $(this); // Ikonu al
+
+			// Kullanıcının beğeni durumu kontrolü
+			$.ajax({
+				type: 'GET',
+				url: `/Like/CheckLikeStatus?productId=${productId}`,
+				success: function (response) {
+					if (response.success) {
+						if (response.isLiked) {
+							// Eğer ürün beğenildiyse, beğeniyi kaldır
+							var likeModel = {
+								ProductId: productId,
+								UserId: 0 // UserId her zaman 0 olarak ayarlanır
+							};
+
+							$.ajax({
+								type: 'DELETE',
+								url: '@Url.Action("DeleteLike", "Like")',
+								contentType: 'application/json',
+								data: JSON.stringify(likeModel),
+								success: function (deleteResponse) {
+									if (deleteResponse.success) {
+										likeIcon.css('color', '#000'); // İkonu griye döndür
+										
+									} else {
+										alert('Beğeni kaldırılırken bir hata oluştu.');
+									}
+								},
+								error: function () {
+									alert('Bilinmeyen bir hata oluştu.');
+								}
+							});
+						} else {
+							// Eğer beğenilmemişse, yeni beğeni oluştur
+							var likeModel = {
+								ProductId: productId,
+								UserId: 0 // UserId her zaman 0 olarak ayarlanır
+							};
+
+							$.ajax({
+								type: 'POST',
+								url: '@Url.Action("CreateLike", "Like")',
+								contentType: 'application/json',
+								data: JSON.stringify(likeModel),
+								success: function (createResponse) {
+									if (createResponse.success) {
+										likeIcon.css('color', '#717fe0'); // İkonu mavi yap
+										
+									} else {
+										alert('Beğeni yapılırken bir hata oluştu.');
+									}
+								},
+								error: function () {
+									alert('Bilinmeyen bir hata oluştu.');
+								}
+							});
+						}
+					} else {
+						alert('Beğeni durumu kontrol edilirken bir hata oluştu.');
+					}
+				},
+				error: function () {
+					alert('Beğeni durumu kontrol edilirken bir hata oluştu.');
+				}
+			});
+		});
+	});
+
+
+
+
 
 	$(document).ready(function () {
         $('#colorId').on('change', function () {

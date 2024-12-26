@@ -38,6 +38,7 @@ namespace FGShop.DataAccessLayer.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<ProducthasColorAndSize> producthasColorAndSizes { get; set; }
         public DbSet<ProducthasColorAndSizehasStock> producthasColorAndSizehasStocks { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
     }
 }

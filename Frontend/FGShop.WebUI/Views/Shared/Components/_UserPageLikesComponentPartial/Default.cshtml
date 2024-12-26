@@ -1,0 +1,41 @@
+﻿@model List<GetByUserIdGetAllLikes>
+@{
+    int count = 0;
+}
+
+<div class="col-sm-12">
+    <div class="card">
+        
+        <div class="table-responsive signal-table custom-scrollbar">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Ürün Adı</th>
+                        <th scope="col">Fiyatı	</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(var like in Model)
+                    {
+                        count++;
+                        <tr>
+                            <th scope="row" style="vertical-align: middle; text-align: center;">@count</th>
+                            <td>
+                                <img class="img-30 me-2" src="@like.ConvertPhoto" alt="profile"> <a href="/ProductDetail/Index/@like.ProductId">
+                                    @(like.ProductName?.Length > 40
+                                        ? like.ProductName.Substring(0, 40) + "..."
+                                        : like.ProductName)
+                                </a>
+                            </td>
+                            <td>@like.Price TL</td>
+                            <td></td>
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

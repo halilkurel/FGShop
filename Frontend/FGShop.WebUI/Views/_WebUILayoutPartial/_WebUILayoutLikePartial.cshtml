@@ -1,0 +1,88 @@
+﻿@{
+    var model = ViewBag.LikeCart as List<FGShop.WebUI.Models.EFLikeModels.GetByUserIdGetAllLikes>;
+}
+
+<!-- Cart -->
+<div class="wrap-header-cart js-likepanel-cart">
+    <div class="s-full js-likehide-cart"></div>
+
+    <div class="header-cart flex-col-l p-l-65 p-r-25">
+        <div class="header-cart-title flex-w flex-sb-m p-b-8">
+            <span class="mtext-103 cl2">
+                Beğendiklerim
+            </span>
+
+            <div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-likehide-cart">
+                <i class="zmdi zmdi-close"></i>
+            </div>
+        </div>
+
+        <div class="header-cart-content flex-w js-pscroll">
+            <ul class="header-cart-wrapitem w-full">
+                @if (model != null && model.Any())
+                {
+                    @foreach (var item in model)
+                    {
+                        <li class="header-cart-item flex-w flex-t m-b-12">
+                            <button type="submit" id="remove-like" data-id="@item.LikeId">
+                                <div class="header-cart-item-img">
+
+                                    <img src="@item.ConvertPhoto" alt="IMG">
+
+
+                                </div>
+                            </button>
+
+                            <div class="header-cart-item-txt p-t-8">
+                                <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                                    @item.ProductName
+                                </a>
+
+                                <span class="header-cart-item-info">
+                                    @item.Price TL
+                                </span>
+                            </div>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <p>Sepetinizde ürün bulunmamaktadır.</p>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).on('click', '#remove-like', function (e) {
+        e.preventDefault();
+
+
+        var likeId = $(this).data('id'); // Ürün ID'sini alıyoruz
+
+        var row = $(this).closest('li');
+
+        $.ajax({
+            url: '@Url.Action("RemoveLike", "Cart", new { id = "__id__" })'.replace('__id__', likeId),
+            type: 'DELETE',
+            success: function (response) {
+                if (response.success) {
+                    row.remove(); // Satırı kaldırıyoruz
+                } else {
+                    alert(response.message || "Silinirken bir hata oluştu.");
+                }
+            },
+            error: function () {
+                alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+            }
+        });
+    });
+
+
+</script>
+
+

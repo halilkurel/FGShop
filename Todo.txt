@@ -3,14 +3,19 @@
 
 01.12.24
 - UI Katmanýnda Modal kýsmýna çözüm bulunacak.		//Çözüm bulunamadý . Modal kaldýrýldý. Direk ürünün sayfasýna yönlendiriliyor.
-- Stock bilgisi color ve size e göre yapýlacak			//Tamamlandý
+- Stock bilgisi color ve size e göre yapýlacak			//TAMAMLANDI
 13.12.24
-- Order tablosu baðýmsýz olacak çünkü ürün silindiðinde order verisi silinmesin.
-- UI katmanýnda kullanýcý sayfalarý düzenlenecek
+- Order tablosu baðýmsýz olacak çünkü ürün silindiðinde order verisi silinmesin.	//TAMAMLANDI 
+
+23.12.24
+- UI katmanýnda kullanýcý sayfalarý düzenlenecek //		TAMAMLANDI
+- UI Katmanýnda fovori kýsmý yapýlacak		//TAMAMLANDI
+
+
+26.12.24
 - Dashboard ypýlacak.
 - Admin paneli bildirim kýsmý düzenlenecek
 - UI Katmanýnda Footer kýsmý düzenlanecek
-- UI Katmanýnda fovori kýsmý yapýlacak
 - UI Katmanýnda ürünler kýsmýnda filtre kýsmý yapýlacak
 
 

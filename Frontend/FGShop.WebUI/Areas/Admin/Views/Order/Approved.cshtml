@@ -83,14 +83,14 @@
                                     {
                                         <tr class="product-removes">
                                             <td>
-                                                <a href="/Admin/Order/OrderDetailPage/@item.GetByOrderId.Id" style="color:black; text-decoration:none;">
+                                                <a href="/Admin/Order/OrderDetailPage/@item.Id" style="color:black; text-decoration:none;">
                                                     <div class="product-names">
-                                                        <div class="light-product-box"><img class="img-fluid" src="@item.GetByProductId.CoverPhoto" alt="laptop"></div>
+                                                        <div class="light-product-box"><img class="img-fluid" src="@item.CoverPhoto " alt="laptop"></div>
                                                         <p>
                                                             @(
-                                                                item.GetByProductId.ProductName.Length > 45
-                                                                ? item.GetByProductId.ProductName.Substring(0, 45) + "..."
-                                                                : item.GetByProductId.ProductName
+                                                                item.ProductName.Length > 45
+                                                                ? item.ProductName.Substring(0, 45) + "..."
+                                                                : item.ProductName
                                                                 )
                                                         </p>
                                                     </div>
@@ -99,27 +99,27 @@
                                             </td>
                                             <td>
                                                 <div class="light-product-box">
-                                                    <p>@item.GetByOrderId.OrderQuantity</p>
+                                                    <p>@item.OrderQuantity</p>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="light-product-box">
-                                                    <p>@item.GetByProductId.Price</p>
+                                                    <p>@item.Price </p>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="light-product-box">
-                                                    <p>@item.UserList.Username</p>
+                                                    <p>@item.UserName</p>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="light-product-box">
-                                                    <p>@item.ResultStatus.StatusName</p>
+                                                    <p>@item.StatusName</p>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="product-action">
-                                                    <a class="delete-order text-danger" data-id="@item.GetByOrderId.Id">
+                                                    <a class="delete-order text-danger" data-id="@item.Id">
                                                         <svg>
                                                             <use href="/Riho-Bootstrap-Admin/admin/assets/svg/icon-sprite.svg#trash1"></use>
                                                         </svg>

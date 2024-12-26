@@ -203,9 +203,12 @@ namespace FGShop.WebUI.Controllers
                         {
                             UserName = userName,
                             ColorName = item.ColorName,
+                            SizeId= Convert.ToInt32(item.SizeId),
+                            ColorId= Convert.ToInt32(item.ColorId),
                             SizeName = item.SizeName,
                             OrderQuantity = item.OrderQuantity,
                             ProductName = item.ProductName,
+                            ProductId = Convert.ToInt32(item.ProductId),
                             StatusId = 4,
                             OrderDate = DateTime.Now,
                             PhoneNumber = userAdressModel.PhoneNumber,
@@ -298,8 +301,11 @@ namespace FGShop.WebUI.Controllers
                             UserName = userName,
                             ColorName = item.ColorName,
                             SizeName = item.SizeName,
+                            SizeId = Convert.ToInt32(item.SizeId),
+                            ColorId = Convert.ToInt32(item.ColorId),
                             OrderQuantity = item.OrderQuantity,
                             ProductName = item.ProductName,
+                            ProductId = Convert.ToInt32(item.ProductId),
                             StatusId = 4,
                             OrderDate = DateTime.Now,
                             PhoneNumber = updateModel.PhoneNumber,
@@ -351,6 +357,29 @@ namespace FGShop.WebUI.Controllers
         }
 
 
-    }
+		[HttpDelete("RemoveLike/{id}")]
+		public async Task<IActionResult> RemoveLike(int id)
+		{
+
+			var httpClient = _httpClientFactory.CreateClient();
+			string url = $"https://localhost:7171/api/Likes/{id}";
+
+			// Ürünü silme işlemi
+			var response = await httpClient.DeleteAsync(url);
+
+			if (response.IsSuccessStatusCode)
+			{
+				return Json(new { success = true });
+			}
+			else
+			{
+				var errorMessage = await response.Content.ReadAsStringAsync();
+				return Json(new { success = false, message = errorMessage });
+			}
+
+
+		}
+
+	}
 }
 

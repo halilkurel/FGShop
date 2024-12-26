@@ -23,6 +23,13 @@ namespace FGShop.WebApiLayer.Controllers
             return Ok(data);
         }
 
+        [HttpGet("Last4OrderList")]
+        public async Task<IActionResult> Last4OrderList()
+        {
+            var data = await _orderService.Last4OrderList();
+            return Ok(data);
+        }
+
         //İptal edlien order'ları listele
         [HttpGet("ListCancelledOrders")]
         public async Task<IActionResult> ListCancelledOrders()
@@ -63,6 +70,12 @@ namespace FGShop.WebApiLayer.Controllers
             return Ok(data);
         }
 
-        //https://localhost:7171/api/EFOrders/25
+        [HttpGet("GetByUserNameOrders/{userName}")]
+        public async Task<IActionResult> GetByUserNameOrders(string userName)
+        {
+            var data = await _orderService.GetByUserNameOrders(userName);
+            return Ok(data);
+        }
+        
     }
 }

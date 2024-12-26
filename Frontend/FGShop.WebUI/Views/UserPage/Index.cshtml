@@ -5,178 +5,125 @@
     Layout = "~/Views/_WebUILayout/Index.cshtml";
 }
 
-<style>
-    /* Önceki stil tanımlamaları burada kalabilir */
-    .container1 {
-        height: 80vh;
-        width: 100%;
-        position: relative;
-    }
-
-    .body1 {
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: flex;
-        padding: 10px;
-        box-sizing: border-box;
-    }
-
-    .row1 {
-        flex: 0 0 25%;
-        background-color: #B0C4DE;
-        margin: 5px;
-        border-radius: 10px;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        box-sizing: border-box;
-    }
-
-    .row2 {
-        flex: 0 0 75%;
-        margin: 5px;
-        border-radius: 10px;
-        padding: 10px;
-        display: none; /* Başlangıçta gizli olacak */
-        box-sizing: border-box;
-        overflow: hidden; /* Taşma durumunda kaydırma çubuğu ekleme */
-        max-height: calc(80vh - 20px); /* Yüksekliği sınırla */
-    }
-
-    .menu-item {
-        margin: 10px 0;
-        background-color: #FFFFFF;
-        padding: 10px;
-        border-radius: 5px;
-        text-align: center;
-        width: 100%;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        box-sizing: border-box;
-    }
-
-        .menu-item:hover {
-            background-color: #F0E68C;
-        }
-
-    .orders, .information {
-        width: 100%;
-        box-sizing: border-box;
-        margin: 25px 0; /* Üst ve alt boşluk ekle */
-        background-color: silver;
-        display: none; /* Başlangıçta gizli olacak */
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    .a1 {
-        text-decoration: none; /* Alt çizgiyi kaldır */
-        color: black; /* Yazı rengini ayarla */
-        display: flex; /* Flexbox kullan */
-        justify-content: center; /* Yatayda ortala */
-        align-items: center; /* Dikeyde ortala */
-        width: 100%; /* Genişlik */
-        height: 100%; /* Yükseklik */
-        box-sizing: border-box; /* Kutuyu hesaba kat */
-    }
 
 
-    p {
-        color: black;
-    }
-</style>
+@await Component.InvokeAsync("_UserPageHeadComponentPartial")
 
-<!-- Cart -->
-@await Html.PartialAsync("~/Views/_WebUILayoutPartial/_WebUILayoutCardPartial.cshtml")
-
-<div class="container1">
-    <div class="body1">
-        <div class="row1">
-            <div class="menu-item" onclick="showContent('orders')">Siparişler</div>
-            <div class="menu-item" onclick="showContent('information')">Kullanıcı Bilgileri</div>
-            <div class="menu-item">
-                <form id="logoutForm" asp-area="Admin" asp-controller="LoginSignIn" asp-action="LogOut" method="post" style="display: none;">
-                    <!-- Form gizli, JavaScript ile tetiklenecek -->
-                </form>
-                <a href="javascript:void(0);" class="sidebar-link sidebar-title link-nav a1" onclick="document.getElementById('logoutForm').submit();" style="display: flex; align-items: center;">
-                    Çıkış Yap</a>
+<!-- Page Body Start-->
+<div class="page-body-wrapper">
+    <div class="page-body">
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            <div class="user-profile social-app-profile">
+                <div class="row">
+                    <!-- user profile start-->
+                    <div class="col-sm-12">
+                        <div class="card hovercard text-center">
+                            <div class="user-image"> </div>
+                            <div class="info market-tabs p-0">
+                                <ul class="nav nav-tabs border-tab tabs-scoial" id="top-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="top-timeline" data-bs-toggle="tab" href="#timeline" role="tab" aria-controls="timeline" aria-selected="true">Profilim</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="top-about" data-bs-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="false">Siparişlerim</a>
+                                    </li>
+                                    <li class="nav-item sc">
+                                        <a class="nav-link" id="top-photos" data-bs-toggle="tab" href="#photos" role="tab" aria-controls="photos" aria-selected="false">Likes</a>
+                                    </li>
+                                    <li class="nav-item lo">
+                                        <a class="nav-link" href="/LoginSignIn/LogOut">Çıkış Yap</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="top-tabContent">
+                    <div class="tab-pane fade show active" id="timeline" style="text-align:center;" role="tabpanel" aria-labelledby="timeline" >
+                        <div class="col-xl-10 tab-content-container" style="text-align:left;">
+                            @await Component.InvokeAsync("_UserPageProfileFormComponentPartial")
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="about" role="tabpanel" style="text-align:center;" aria-labelledby="about">
+                        <div class="col-xl-10 tab-content-container" style="text-align:left;">
+                            @await Component.InvokeAsync("__UserPageOrdersComponentPartial")
+                            
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="photos" role="tabpanel" style="text-align:center;" aria-labelledby="photos">
+                        <div class="col-xl-10 tab-content-container" style="text-align:left;">
+                            @await Component.InvokeAsync("_UserPageLikesComponentPartial")
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row2">
-            <div class="orders">
-                <p>Orders</p>
-            </div>
-            <div class="information">
-                <h3>Kullanıcı Bilgileri</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Özellik</th>
-                            <th>Değer</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Ad</td>
-                            <td>@Model.Name</td>
-                        </tr>
-                        <tr>
-                            <td>Soyad</td>
-                            <td>@Model.Surname</td>
-                        </tr>
-                        <tr>
-                            <td>Kullanıcı Adı</td>
-                            <td>@Model.Username</td>
-                        </tr>
-                        <tr>
-                            <td>Telefon Numarası</td>
-                            <td>@Model.PhoneNumber</td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>@Model.Email</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <!-- Container-fluid Ends -->
     </div>
 </div>
 
 <script>
-    function showContent(content) {
-        // Öncelikle tüm içerikleri gizle
-        document.querySelector('.orders').style.display = 'none';
-        document.querySelector('.information').style.display = 'none';
+    document.querySelectorAll('.nav-item').forEach(tab => {
+        tab.addEventListener('click', function (e) {
+            // Çıkış linkine tıklanırsa, preventDefault çağrısı yapılmaz.
+            if (e.target.closest('a').getAttribute('href') === '/LoginSignIn/LogOut') {
+                return;
+            }
 
-        // Row2'yi göster
-        document.querySelector('.row2').style.display = 'block';
+            e.preventDefault(); // Varsayılan davranışı engelle
 
-        // Tıklanan içeriği göster
-        if (content === 'orders') {
-            document.querySelector('.orders').style.display = 'block';
-        } else if (content === 'information') {
-            document.querySelector('.information').style.display = 'block';
-        }
-    }
+            // Tüm sekmelere ait col-xl-10 elemanlarını gizle
+            document.querySelectorAll('.tab-pane .col-xl-10').forEach(content => {
+                content.style.display = 'none'; // Tüm col-xl-10 elemanlarını gizle
+            });
+
+            // Tıklanan sekmeye ait col-xl-10 elemanını göster
+            const targetTab = this.querySelector('a').getAttribute('href'); // Hangi sekmenin hedef olduğunu al
+            const targetContent = document.querySelector(`${targetTab} .col-xl-10`); // Hedef elemanı bul
+            if (targetContent) {
+                targetContent.style.display = 'inline-block'; // Hedef içeriği görünür yap
+            }
+
+            // Aktif sekmeyi güncelle
+            document.querySelectorAll('.nav-item').forEach(link => link.classList.remove('active')); // Tüm sekmelerden 'active' sınıfını kaldır
+            this.classList.add('active'); // Tıklanan sekmeye 'active' sınıfını ekle
+        });
+    });
 </script>
+
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/jquery.min.js"></script>
+<!-- Bootstrap js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+<!-- feather icon js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/icons/feather-icon/feather.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/icons/feather-icon/feather-icon.js"></script>
+<!-- scrollbar js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/scrollbar/simplebar.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/scrollbar/custom.js"></script>
+<!-- Sidebar jquery-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/config.js"></script>
+<!-- Plugins JS start-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/sidebar-menu.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/sidebar-pin.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/slick/slick.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/slick/slick.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/header-slick.js"></script>
+<!-- calendar js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/photoswipe/photoswipe.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/photoswipe/photoswipe-ui-default.min.js"></script>
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/photoswipe/photoswipe.js"></script>
+
+<script src="/Riho-Bootstrap-Admin/assets/js/letter-box/custom-mail-pagination.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/letter-box/custom-usermail.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/editors/quill.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/editors/custom-quill.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/print.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/tooltip-init.js"></script>
+
+<!-- Plugins JS Ends-->
+<!-- Theme js-->
+<script src="/Riho-Bootstrap-Admin/admin/assets/js/script.js"></script>
+<script src="/Riho-Bootstrap-Admin/assets/js/theme-customizer/customizer.js"></script>
+
 

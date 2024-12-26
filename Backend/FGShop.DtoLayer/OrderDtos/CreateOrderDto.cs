@@ -15,10 +15,15 @@ namespace FGShop.DtoLayer.OrderDtos
 		public string? ColorName { get; set; }
 		public int? StatusId { get; set; }
 		public DateTime? OrderDate { get; set; }
+        public int ProductId { get; set; }
 
 
-		//Adress bilgileri
-		public string? Email { get; set; }
+        public int? ColorId { get; set; }
+        public int? SizeId { get; set; }
+
+
+        //Adress bilgileri
+        public string? Email { get; set; }
 		public string? PhoneNumber { get; set; }
 		public string? Country { get; set; }
 		public string? City { get; set; }

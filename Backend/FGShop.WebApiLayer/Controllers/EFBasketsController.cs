@@ -39,5 +39,14 @@ namespace FGShop.WebApiLayer.Controllers
             return Ok();
         }
 
-    }
+
+		[HttpGet("GetByUserIdSignalR/{userId}")]
+		public async Task<IActionResult> GetByUserIdSignalR(int userId)
+		{
+			var data = await _service.GetByUserIdBasketQuantity(userId);
+			return Ok(data);
+
+		}
+
+	}
 }

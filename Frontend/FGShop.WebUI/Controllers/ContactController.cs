@@ -1,5 +1,6 @@
 ﻿using FGShop.WebUI.Models.CartModels;
 using FGShop.WebUI.Models.ContactModels;
+using FGShop.WebUI.Models.EFLikeModels;
 using FGShop.WebUI.Models.ValdiationModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -34,8 +35,13 @@ namespace FGShop.WebUI.Controllers
             var cart = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetCartDetailList>>(jsonString);
             ViewBag.Cart = cart;
 
+			var response1 = await client.GetAsync($"https://localhost:7171/api/EFLikes/GetByUserIdGetAllLikes/{userId}");
+			var jsonString1 = await response1.Content.ReadAsStringAsync();
+			var model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GetByUserIdGetAllLikes>>(jsonString1);
+			ViewBag.LikeCart = model;
 
-            return View();
+
+			return View();
         }
 
         public PartialViewResult ContactFormPartial()

@@ -14,5 +14,6 @@ namespace FGShop.BussinessLayer.EntityFremawork.EfOrder
 		Task<List<ResultEFOrderDto>> GetProductDetailByUserId(int userId);
 		Task<List<ResultBasketDto>> GetByUserId(int userId);
         Task UserIdBasketRemove(int userId);
+		Task<int> GetByUserIdBasketQuantity(int userId);
     }
 }

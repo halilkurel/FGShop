@@ -15,7 +15,7 @@ using System.Text;
 
 namespace FGShop.BussinessLayer.Services
 {
-    public class AuthService: IAuthService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -141,13 +141,13 @@ namespace FGShop.BussinessLayer.Services
                 if (user != null)
                 {
                     // Token'ı oluştur
-                    var token = _tokenService.TokenCreate(user.UserName, roles[0],userId);
+                    var token = _tokenService.TokenCreate(user.UserName, roles[0], userId);
 
                     return new Response<UserLoginDto>(ResponseType.Success, new UserLoginDto
                     {
                         Password = dto.Password,
                         UserName = dto.UserName
-                    },token);
+                    }, token);
                 }
             }
 
@@ -219,16 +219,16 @@ namespace FGShop.BussinessLayer.Services
             {
                 var userDto = new UserListDto
                 {
-                    Id = user.Id, 
+                    Id = user.Id,
                     Name = user.Name,
-                    Surname= user.Surname,
-                    Username = user.UserName, 
-                    Email = user.Email ,
-                    PhoneNumber = user.PhoneNumber 
+                    Surname = user.Surname,
+                    Username = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber
 
                 };
 
-                users.Add(userDto); 
+                users.Add(userDto);
             }
             return users;
         }
@@ -236,7 +236,7 @@ namespace FGShop.BussinessLayer.Services
         public async Task<UserListDto> GetUserList(int id)
         {
             var response = await _userManager.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
-            if(response == null)
+            if (response == null)
             {
                 return null;
             }
@@ -246,7 +246,7 @@ namespace FGShop.BussinessLayer.Services
                 Name = response.Name,
                 Surname = response.Surname,
                 Username = response.UserName,
-                Email = response.Email ,
+                Email = response.Email,
                 PhoneNumber = response.PhoneNumber
             };
             return user;

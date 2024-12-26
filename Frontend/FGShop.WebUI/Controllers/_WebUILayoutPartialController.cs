@@ -34,7 +34,11 @@ namespace FGShop.WebUI.Controllers
 			return PartialView();
         }
 
-
+		[HttpGet]
+		public async Task<IActionResult> _WebUILayoutLikePartial()
+		{
+			return PartialView();
+		}
 
 
 

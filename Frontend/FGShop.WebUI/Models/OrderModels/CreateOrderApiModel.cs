@@ -10,6 +10,7 @@
         public string? ColorName { get; set; }
         public int? StatusId { get; set; }
         public DateTime? OrderDate { get; set; }
+        public int ProductId { get; set; }
 
 
         //Adress bilgileri
@@ -20,6 +21,10 @@
         public string? District { get; set; }
         public string? Neighbourhood { get; set; }
         public string? Address { get; set; }
+
+        public int SizeId { get; set; }
+        public int ColorId { get; set; }
+
 
 
     }

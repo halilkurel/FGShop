@@ -34,7 +34,15 @@ namespace FGShop.BussinessLayer.EntityFremawork.EfOrder
 			return map;
 		}
 
-		public async Task<List<ResultEFOrderDto>> GetProductDetailByUserId(int userId)
+        public async Task<int> GetByUserIdBasketQuantity(int userId)
+        {
+            var data = await _context.Baskets
+				.Where(x => x.UserId == userId)
+				.CountAsync();
+			return data;
+        }
+
+        public async Task<List<ResultEFOrderDto>> GetProductDetailByUserId(int userId)
 		{
 			var basketData = await _context.Baskets
 				.Where(x => x.UserId == userId)
@@ -70,5 +78,7 @@ namespace FGShop.BussinessLayer.EntityFremawork.EfOrder
             }
 			
         }
+
+		
     }
 }

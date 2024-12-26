@@ -257,6 +257,29 @@ namespace FGShop.DataAccessLayer.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.Like", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Likes");
+                });
+
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -270,6 +293,9 @@ namespace FGShop.DataAccessLayer.Migrations
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ColorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ColorName")
                         .HasColumnType("nvarchar(max)");
@@ -295,8 +321,14 @@ namespace FGShop.DataAccessLayer.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SizeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SizeName")
                         .HasColumnType("nvarchar(max)");
@@ -676,6 +708,21 @@ namespace FGShop.DataAccessLayer.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FGShop.EntityLayer.Entities.Like", b =>
+                {
+                    b.HasOne("FGShop.EntityLayer.Entities.Product", "Product")
+                        .WithMany("Likes")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("FGShop.EntityLayer.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Order", b =>
                 {
                     b.HasOne("FGShop.EntityLayer.Entities.Status", "Status")
@@ -831,6 +878,8 @@ namespace FGShop.DataAccessLayer.Migrations
 
             modelBuilder.Entity("FGShop.EntityLayer.Entities.Product", b =>
                 {
+                    b.Navigation("Likes");
+
                     b.Navigation("ProducthasCategories");
 
                     b.Navigation("ProducthasColors");

@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{5FE5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Todo", "Todo", "{FD94A1E9-988D-467D-8FFE-151A2AFEE508}"
 	ProjectSection(SolutionItems) = preProject
+		SignalRKullanımı.txt = SignalRKullanımı.txt
 		TextFile.txt = TextFile.txt
 		Todo.txt = Todo.txt
 	EndProjectSection

@@ -1,0 +1,51 @@
+﻿@model List<ResultEFOrderModel>
+@{
+    int count = 0;
+}
+
+<!-- Container-fluid starts-->
+<div class="container-fluid basic_table">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="table-responsive custom-scrollbar">
+                    <table class="table">
+                        <thead>
+                            <tr class="border-bottom-primary">
+                                <th scope="col"> </th>
+                                <th scope="col">Ürün Adı</th>
+                                <th scope="col">Renk</th>
+                                <th scope="col">Beden</th>
+                                <th scope="col">Adet</th>
+                                <th scope="col">Toplam Fiyat</th>
+                                <th scope="col">Durum</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                count++;
+                                <tr class="border-bottom-secondary">
+                                    <th scope="row" style="vertical-align: middle; text-align: center;">@count</th>
+                                    <td>
+                                        <img class="img-30 me-2" src="@order.CoverPhoto" alt="profile">@(order.ProductName.Length > 40
+                                    ? order.ProductName.Substring(0, 40) + "..."
+                                    : order.ProductName)
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: left;">@order.ColorName</td>
+                                    <td style="vertical-align: middle; text-align: left;">@order.SizeName</td>
+                                    <td style="vertical-align: middle; text-align: left;">@order.OrderQuantity</td>
+                                    <td style="vertical-align: middle; text-align: left;">@(Convert.ToInt64(order.Price) * order.OrderQuantity) TL</td>
+                                    <td style="vertical-align: middle; text-align: left;">@order.StatusName</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->
